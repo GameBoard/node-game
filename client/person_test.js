@@ -15,4 +15,9 @@ describe('Person', function(){
     var p = new Person("dude");
     assert.equal(p.name, "dude");
   });
+
+  it("should speak", function(){
+    var p = new Person();
+    p.talk();
+  });
 })

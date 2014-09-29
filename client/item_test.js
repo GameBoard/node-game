@@ -1,7 +1,8 @@
 var assert = require("assert");
 var sinon = require('sinon');
 var Item = require('./item.js');
-var canvas = {}
+
+var view = {update: sinon.spy()}
 
 
 describe('Item', function(){
@@ -23,11 +24,16 @@ describe('Item', function(){
     assert.equal(i.position.y, 10);   
   })
 
-  it('should update change in position', function(){
+  it('should be able to have a view', function(){
     var i = new Item();
-    i.changePosition({x:5,y:10});
-    i.
+    i.addView(view);
+  })
 
+  it('should update view when change in position', function(){
+    var i = new Item();
+    i.addView(view);
+    i.changePosition({x:5,y:10});
+    view.update.calledOnce;
   })
 
 

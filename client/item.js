@@ -10,6 +10,9 @@ Item.prototype = {
   },
   updateView: function(){
     console.log('update view');
+  },
+  addView: function(view){
+    this.view = view;
   }
 }
 

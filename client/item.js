@@ -9,7 +9,9 @@ Item.prototype = {
     this.updateView();
   },
   updateView: function(){
-    console.log('update view');
+    if(this.view){
+      this.view.update();
+    }
   },
   addView: function(view){
     this.view = view;

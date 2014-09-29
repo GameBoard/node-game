@@ -27,13 +27,14 @@ describe('Item', function(){
   it('should be able to have a view', function(){
     var i = new Item();
     i.addView(view);
+    assert.equal(i.view, view); 
   })
 
   it('should update view when change in position', function(){
     var i = new Item();
     i.addView(view);
     i.changePosition({x:5,y:10});
-    view.update.calledOnce;
+    assert(view.update.calledOnce);
   })
 
 

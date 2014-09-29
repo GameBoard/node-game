@@ -7,6 +7,10 @@ Person.prototype = {
   talk: function(message){
     console.log('hello my name is', this.name);
   },
+
+  moveItem: function(item, newPosition){
+    item.position = newPosition;
+  }
 }
 
 module.exports = Person
@@ -18,6 +22,11 @@ window.onload = function(){
   // var p = new Person(name);
   // console.log('I am alive', p)
   // var server = io.connect('http://192.168.105.248:8080');
+  window.canvas = document.getElementById('playground')
+  var ctx = canvas.getContext("2d")
+  ctx.fillStyle = "rgb(200,0,0)";
+  ctx.fillRect (10, 10, 55, 50);
+
   window.Person = Person
 }
 },{"./person.js":1}]},{},[2]);

@@ -23,6 +23,11 @@ describe('Person', function(){
     p.talk();  
   });
 
+  it("should have a position", function(){
+    var p = new Person();
+    assert('position' in p);
+  });
+
   it("should be able to move an item", function(){
     var p = new Person();
     var i = new Item();

@@ -41,6 +41,7 @@ module.exports = ItemView;
 },{}],3:[function(require,module,exports){
 var Person = function(name){
   this.name = name || "default";
+  this.position = {x:0, y:0};
 }
 
 Person.prototype = {

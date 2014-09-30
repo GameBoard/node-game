@@ -2,7 +2,7 @@ var assert = require("assert");
 var sinon = require('sinon');
 var Item = require('./item.js');
 
-var view = {update: sinon.spy()}
+var view = {render: sinon.spy()}
 
 
 describe('Item', function(){
@@ -34,7 +34,7 @@ describe('Item', function(){
     var i = new Item();
     i.addView(view);
     i.changePosition({x:5,y:10});
-    assert(view.update.calledOnce);
+    assert(view.render.calledOnce);
   })
 
 

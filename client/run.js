@@ -1,15 +1,20 @@
 var Person = require("./person.js");
 var Item = require("./item.js");
+var ItemView = require("./item_view.js");
 
 window.onload = function(){
   // var name = prompt("What do you wanna call me?");
   // var p = new Person(name);
   // console.log('I am alive', p)
   // var server = io.connect('http://192.168.105.248:8080');
-  window.canvas = document.getElementById('playground')
-  var ctx = canvas.getContext("2d")
-  ctx.fillStyle = "rgb(200,0,0)";
-  ctx.fillRect (10, 10, 55, 50);
-  window.Item = Item
-  window.Person = Person
+  
+
+  var canvas = document.getElementById('playground')
+  var box = new Item();
+  var boxView = new ItemView(box, canvas);
+  boxView.render();//inital drawing
+
+  window.box = box;
+  window.dude = new Person();
+  
 }

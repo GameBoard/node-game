@@ -26,6 +26,7 @@ describe('Person', function(){
   it("should be able to move an item", function(){
     var p = new Person();
     var i = new Item();
+    // should test calls change position
     p.moveItem(i, {x:5,y:10});
     assert.equal(i.position.x, 5);
     assert.equal(i.position.y, 10);

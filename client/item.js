@@ -10,7 +10,7 @@ Item.prototype = {
   },
   updateView: function(){
     if(this.view){
-      this.view.update();
+      this.view.render();
     }
   },
   addView: function(view){

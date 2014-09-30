@@ -8,7 +8,7 @@ Person.prototype = {
   },
 
   moveItem: function(item, newPosition){
-    item.position = newPosition;
+    item.changePosition(newPosition);
   }
 }
 

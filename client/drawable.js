@@ -1,8 +1,4 @@
-var Drawable = function(position){
-  this.position = position || {x:0, y:0}
-}
-
-Drawable.prototype = {
+var drawable = {
 
   updateView: function(){
     if(this.view){
@@ -14,4 +10,4 @@ Drawable.prototype = {
   }
 }
 
-module.exports  = Drawable
+module.exports = drawable

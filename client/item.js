@@ -1,8 +1,8 @@
 var lib = require('./lib');
-var Drawable = require('./drawable');
+var drawable = require('./drawable');
 
-var Item = function(){
-
+var Item = function(position){
+  this.position = position || {x:0, y:0}
 }
 
 Item.prototype = {
@@ -12,6 +12,6 @@ Item.prototype = {
   },
 }
 
-lib.extend(Item.prototype, Drawable.prototype)
+lib.extend(Item.prototype, drawable)
 
 module.exports = Item

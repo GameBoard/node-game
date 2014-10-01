@@ -10,6 +10,12 @@ describe('Item', function(){
     assert('addView' in i);
   })
 
+  it('shoud have a position', function(){
+    i = new Item();
+    assert.equal(i.position.x, 0)
+    assert.equal(i.position.y, 0)
+  })
+
   it('should be moveable', function(){
     var i = new Item();
     i.changePosition({x:5,y:10});

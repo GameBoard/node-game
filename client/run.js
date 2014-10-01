@@ -3,8 +3,6 @@ var Drawable= require("./drawable.js");
 var CanvasView = require("./canvas_view.js");
 
 
-
-
 window.onload = function(){
 
   var canvas = document.getElementById('playground');

@@ -77,6 +77,14 @@ var lib = {
       }
     }
     return destination; 
+  },
+
+  distance: function(position1, position2){
+    // todo test this
+    var diffX = Math.abs(position2.x - position1.x)
+    var diffY = Math.abs(position2.y - position1.y)
+
+    return Math.sqrt(Math.pow(diffX,2) + Math.pow(diffY,2))
   }
 }
 
@@ -85,23 +93,36 @@ module.exports = lib;
 var lib = require('./lib');
 var drawable = require('./drawable');
 
-var Person = function(name){
-  this.name = name || "default";
-  this.position = {x:20, y:20};
+var Person = function(options){
+  var options = options || {}
+  this.name = options.name || "default";
+  this.position = options.position || {x:20, y:20};
   this.imageType = 'circle';
 }
 
-Person.prototype = {
+var proto = {
   talk: function(message){
     console.log('hello my name is', this.name);
   },
 
-  moveItem: function(item, newPosition){
-    item.changePosition(newPosition);
+  pickUpItem: function(item){
+    var distance = lib.distance(this.position,item.position);
+    if(distance <= 20){
+      this.item = item;
+    }
+  },
+
+  changePosition: function(newPosition){
+    this.position = newPosition;
+    if(this.item){
+      this.item.position = newPosition;
+    }
+    this.updateView();
   }
 }
 
 lib.extend(Person.prototype, drawable)
+lib.extend(Person.prototype, proto)
 
 module.exports = Person
 },{"./drawable":2,"./lib":4}],6:[function(require,module,exports){

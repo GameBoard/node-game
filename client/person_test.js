@@ -9,7 +9,7 @@ describe('Person', function(){
   });
 
   it('should be nameable', function(){
-    var p = new Person("dude");
+    var p = new Person({name:"dude"});
     assert.equal(p.name, "dude");
   });
 
@@ -23,16 +23,35 @@ describe('Person', function(){
     assert('position' in p);
   });
 
-  it("should be able to move an item", function(){
-    var p = new Person();
-    var i = {changePosition: sinon.spy()}
-    p.moveItem(i, {x:5,y:10});
-    assert(i.changePosition.calledWith({x:5,y:10}))
-  })
-
   it('shoud be a drawable', function(){
     var p = new Person();
     assert('updateView' in p);
     assert('addView' in p);
   })
+
+  it("should be able to pick up an item", function(){
+    var p = new Person({position:{x:10,y:10}});
+    var i = {position:{x:10,y:10}};
+    p.pickUpItem(i);
+    assert.equal(p.item, i);
+  })
+
+  it("should only be able to pick up an item if distance less than 20", function(){
+    var p = new Person({position:{x:30,y:30}});
+    var i = {position:{x:10,y:10}};
+    p.pickUpItem(i);
+    assert.equal(p.item, null);
+  })
+
+  it("should move items it is carrying", function(){
+    var p = new Person({position:{x:10,y:10}});
+    var i = {position:{x:10,y:10}};
+    p.pickUpItem(i);
+    p.changePosition({x:20,y:20});
+    assert.equal(i.position.x, 20);
+    assert.equal(i.position.y, 20);
+  })
+
+
+
 })

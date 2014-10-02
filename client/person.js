@@ -1,6 +1,10 @@
+var lib = require('./lib');
+var drawable = require('./drawable');
+
 var Person = function(name){
   this.name = name || "default";
-  this.position = {x:0, y:0};
+  this.position = {x:20, y:20};
+  this.imageType = 'circle';
 }
 
 Person.prototype = {
@@ -12,5 +16,7 @@ Person.prototype = {
     item.changePosition(newPosition);
   }
 }
+
+lib.extend(Person.prototype, drawable)
 
 module.exports = Person

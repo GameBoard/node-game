@@ -3,13 +3,10 @@ var drawable = require('./drawable');
 
 var Item = function(position){
   this.position = position || {x:0, y:0}
+  this.imageType = 'square';
 }
 
 Item.prototype = {
-  changePosition: function(newPosition){
-    this.position = newPosition;
-    this.updateView();
-  },
 }
 
 lib.extend(Item.prototype, drawable)

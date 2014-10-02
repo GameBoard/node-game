@@ -29,4 +29,10 @@ describe('Person', function(){
     p.moveItem(i, {x:5,y:10});
     assert(i.changePosition.calledWith({x:5,y:10}))
   })
+
+  it('shoud be a drawable', function(){
+    var p = new Person();
+    assert('updateView' in p);
+    assert('addView' in p);
+  })
 })

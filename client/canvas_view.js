@@ -15,9 +15,17 @@ CanvasView.prototype = {
     numDrawables = this.drawables.length;
     for(var i=0; i<numDrawables; i++){
       var item = this.drawables[i];
-      ctx.fillRect(item.position.x, item.position.y, 10, 10);
-    }
-    
+      if (item.imageType === 'square'){
+        ctx.fillRect(item.position.x, item.position.y, 10, 10);
+      }
+      else if(item.imageType === 'circle'){
+        console.log('trying to draw circle');
+        ctx.beginPath();
+        ctx.arc(item.position.x,item.position.y,5,0,2*Math.PI);
+        ctx.fill();
+        // ctx.fillRect(item.position.x, item.position.y, 20, 20);
+      }
+    }   
   }
 }
 

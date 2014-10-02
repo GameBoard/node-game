@@ -16,24 +16,27 @@ CanvasView.prototype = {
     numDrawables = this.drawables.length;
     for(var i=0; i<numDrawables; i++){
       var item = this.drawables[i];
-      ctx.fillRect(item.position.x, item.position.y, 10, 10);
-    }
-    
+      if (item.imageType === 'square'){
+        ctx.fillRect(item.position.x, item.position.y, 10, 10);
+      }
+      else if(item.imageType === 'circle'){
+        console.log('trying to draw circle');
+        ctx.beginPath();
+        ctx.arc(item.position.x,item.position.y,5,0,2*Math.PI);
+        ctx.fill();
+        // ctx.fillRect(item.position.x, item.position.y, 20, 20);
+      }
+    }   
   }
 }
 
 module.exports = CanvasView;
 },{}],2:[function(require,module,exports){
-var Item = function(weight, position){
-  this.weight = weight || 0,
-  this.position = position || {x:0, y:0}
-}
-
-Item.prototype = {
-  changePosition: function(newPosition){
-    this.position = newPosition;
-    this.updateView();
-  },
+var drawable = {
+  // mixing this in allow to be rendered by canvas view
+  // objects should describe a position, 
+  // an image for which to be drawn TODO
+  // also possibly a pattern so they can eg walk TODO 
   updateView: function(){
     if(this.view){
       this.view.render();
@@ -41,28 +44,85 @@ Item.prototype = {
   },
   addView: function(view){
     this.view = view;
+    view.addDrawable(this);
+  },
+  changePosition: function(newPosition){
+    this.position = newPosition;
+    this.updateView();
   }
 }
 
-module.exports  = Item
+module.exports = drawable
 },{}],3:[function(require,module,exports){
-// var Person = require("./person.js");
-var Drawable= require("./drawable.js");
+var lib = require('./lib');
+var drawable = require('./drawable');
+
+var Item = function(position){
+  this.position = position || {x:0, y:0}
+  this.imageType = 'square';
+}
+
+Item.prototype = {
+}
+
+lib.extend(Item.prototype, drawable)
+
+module.exports = Item
+},{"./drawable":2,"./lib":4}],4:[function(require,module,exports){
+var lib = {
+  extend: function(destination, source) {
+    for (var k in source) {
+      if (source.hasOwnProperty(k)) {
+        destination[k] = source[k];
+      }
+    }
+    return destination; 
+  }
+}
+
+module.exports = lib;
+},{}],5:[function(require,module,exports){
+var lib = require('./lib');
+var drawable = require('./drawable');
+
+var Person = function(name){
+  this.name = name || "default";
+  this.position = {x:20, y:20};
+  this.imageType = 'circle';
+}
+
+Person.prototype = {
+  talk: function(message){
+    console.log('hello my name is', this.name);
+  },
+
+  moveItem: function(item, newPosition){
+    item.changePosition(newPosition);
+  }
+}
+
+lib.extend(Person.prototype, drawable)
+
+module.exports = Person
+},{"./drawable":2,"./lib":4}],6:[function(require,module,exports){
+var Person = require("./person.js");
+var Item = require("./item.js");
 var CanvasView = require("./canvas_view.js");
-
-
 
 
 window.onload = function(){
 
   var canvas = document.getElementById('playground');
   var canvasView = new CanvasView(canvas);
-  var box = new Drawable();
+  var box = new Item();
+  var person = new Person();
+  person.addView(canvasView);
   box.addView(canvasView);
-  canvasView.addDrawable(box);
+
   canvasView.render();//inital drawing
 
+  window.person = person;
   window.box = box;
   
 }
-},{"./canvas_view.js":1,"./drawable.js":2}]},{},[3]);
+},{"./canvas_view.js":1,"./item.js":3,"./person.js":5}]},{},[6]);

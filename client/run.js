@@ -11,10 +11,12 @@ window.onload = function(){
   var person = new Person();
   person.addView(canvasView);
   box.addView(canvasView);
-
+  canvasView.focusOnDrawable(person);
   canvasView.render();//inital drawing
+
 
   window.person = person;
   window.box = box;
+  window.canvasView = canvasView;
   
 }

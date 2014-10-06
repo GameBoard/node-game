@@ -1,6 +1,11 @@
 var CanvasView = function(canvas){
   this.canvas = canvas;
   this.drawables = [];
+  canvas.onclick = this.click;
+  // canvas.onkeydown = this.keyPress;
+  this.keyPress = this.keyPress.bind(this);
+  window.addEventListener('keydown',this.keyPress,false);
+  
 }
 
 CanvasView.prototype = {
@@ -26,6 +31,42 @@ CanvasView.prototype = {
         // ctx.fillRect(item.position.x, item.position.y, 20, 20);
       }
     }   
+  },
+
+  focusOnDrawable: function(drawable){
+    this.focusedDrawable = drawable;
+  },
+
+  click: function(ev){
+    console.log('clicked')
+  },
+
+  keyPress: function(ev){
+    var target = this.focusedDrawable
+    if (target){
+      var adjust = {x:0,y:0}
+      switch (ev.keyCode){
+        case 38://up
+          console.log('up');
+          adjust = {x:0,y: -5}
+          break;
+        case 40://down
+          console.log('down');
+          adjust = {x:0,y: 5}
+          break;
+        case 37://left
+          console.log('left');
+          adjust = {x:-5,y: 0}
+          break;
+        case 39://right
+          console.log('right');
+          adjust = {x:5,y: 0}
+          break;
+      }
+      var x = target.position.x + adjust.x;
+      var y = target.position.y + adjust.y;
+      target.changePosition({x:x,y:y});
+    }
   }
 }
 

@@ -24,4 +24,12 @@ describe('CanvasView', function(){
     view.addDrawable(drawableObject)
     assert.equal(view.drawables.length, 1);
   })
+
+  it('should be able focus on drawable', function(){ 
+    var canvas = {};
+    var view = new CanvasView(canvas);
+    var drawableObject = {};
+    view.focusOnDrawable(drawableObject)
+    assert.equal(view.focusedDrawable, drawableObject);
+  })
 })

@@ -46,6 +46,7 @@ CanvasView.prototype = {
     var target = this.focusedDrawable
     if (target){
       var adjust = {x:0,y:0}
+      console.log('key pressed', ev.keyCode)
       switch (ev.keyCode){
         case 38://up
           console.log('up');
@@ -62,6 +63,18 @@ CanvasView.prototype = {
         case 39://right
           console.log('right');
           adjust = {x:5,y: 0}
+          break;
+        case 13:
+          console.log('enter')
+          if (target.item){
+            target.dropAll()
+          }
+          else {
+            item = target.findItemsInReach(this.drawables)[0]
+            if(item){
+              target.pickUpItem(item);
+            }
+          }
           break;
       }
       var x = target.position.x + adjust.x;
@@ -147,8 +160,7 @@ var proto = {
   },
 
   pickUpItem: function(item){
-    var distance = lib.distance(this.position,item.position);
-    if(distance <= 20){
+    if(this.itemInReach(item)){
       this.item = item;
     }
   },
@@ -159,6 +171,29 @@ var proto = {
       this.item.position = newPosition;
     }
     this.updateView();
+  },
+
+  distanceFromSelf:function(item){
+    var distance = lib.distance(this.position,item.position);
+    return distance;
+  },
+
+  itemInReach:function(item){
+    return this.distanceFromSelf(item) <= 20;
+  },
+
+  findItemsInReach: function(items){
+    var inReach = [];
+    items.forEach(function(item){
+      if(item !== this && this.itemInReach(item)){
+        inReach.push(item)
+      }
+    }, this);
+    return inReach;
+  },
+
+  dropAll: function(){
+    this.item = null;
   }
 }
 

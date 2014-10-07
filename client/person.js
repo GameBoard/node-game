@@ -14,8 +14,7 @@ var proto = {
   },
 
   pickUpItem: function(item){
-    var distance = lib.distance(this.position,item.position);
-    if(distance <= 20){
+    if(this.itemInReach(item)){
       this.item = item;
     }
   },
@@ -26,6 +25,29 @@ var proto = {
       this.item.position = newPosition;
     }
     this.updateView();
+  },
+
+  distanceFromSelf:function(item){
+    var distance = lib.distance(this.position,item.position);
+    return distance;
+  },
+
+  itemInReach:function(item){
+    return this.distanceFromSelf(item) <= 20;
+  },
+
+  findItemsInReach: function(items){
+    var inReach = [];
+    items.forEach(function(item){
+      if(item !== this && this.itemInReach(item)){
+        inReach.push(item)
+      }
+    }, this);
+    return inReach;
+  },
+
+  dropAll: function(){
+    this.item = null;
   }
 }
 

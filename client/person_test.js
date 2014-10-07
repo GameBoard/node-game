@@ -51,7 +51,31 @@ describe('Person', function(){
     assert.equal(i.position.x, 20);
     assert.equal(i.position.y, 20);
   })
+  it("should be able to find nearby items", function(){
+    var p = new Person({position:{x:10,y:10}});
+    var item1 = {position:{x:10,y:10}};
+    var item2 = {position:{x:20,y:20}};
+    var item3 = {position:{x:30,y:30}};
+    var items = [item1, item2, item3];
+    assert.equal(p.findItemsInReach(items)[0], item1);
+  })
+  it("should not include itself nearby items", function(){
+    var p = new Person({position:{x:10,y:10}});
+    var item1 = {position:{x:10,y:10}};
+    var item2 = {position:{x:20,y:20}};
+    var item3 = {position:{x:30,y:30}};
+    var items = [item1, item2, item3, p];
+    assert.equal(p.findItemsInReach(items)[0], item1);
+    assert.equal(p.findItemsInReach(items).length, 2);
+  })
 
-
+  it("should be able to drop item", function(){
+    var p = new Person({position:{x:10,y:10}});
+    var i = {position:{x:10,y:10}};
+    p.pickUpItem(i);
+    assert.equal(p.item, i);
+    p.dropAll();
+    assert.equal(p.item, null);
+  })
 
 })

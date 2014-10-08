@@ -6,9 +6,19 @@ var Person = function(options){
   this.name = options.name || "default";
   this.position = options.position || {x:20, y:20};
   this.imageType = 'circle';
+  this.speed = options.speed || 5;
+  this.controllable = true;
 }
 
 var proto = {
+  moveAmount: function(){
+    var moveAmount = this.speed;
+    if(this.item && this.item.weight){
+      moveAmount = moveAmount - this.item.weight
+    }
+    return moveAmount;
+  },
+
   talk: function(message){
     console.log('hello my name is', this.name);
   },

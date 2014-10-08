@@ -9,9 +9,10 @@ window.onload = function(){
   var canvasView = new CanvasView(canvas);
   var box = new Item();
   var person = new Person();
+  var person2 = new Person({position:{x:30,y:30}});
   person.addView(canvasView);
+  person2.addView(canvasView);
   box.addView(canvasView);
-  canvasView.focusOnDrawable(person);
   canvasView.render();//inital drawing
 
 

@@ -1,6 +1,7 @@
 var CanvasView = function(canvas){
   this.canvas = canvas;
   this.drawables = [];
+  this.controllables = [];
   canvas.onclick = this.click;
   // canvas.onkeydown = this.keyPress;
   this.keyPress = this.keyPress.bind(this);
@@ -11,6 +12,9 @@ var CanvasView = function(canvas){
 CanvasView.prototype = {
   addDrawable: function(drawable){
     this.drawables.push(drawable);
+    if (drawable.controllable){
+      this.controllables.push(drawable);
+    }
   },
 
   render: function(){
@@ -24,7 +28,6 @@ CanvasView.prototype = {
         ctx.fillRect(item.position.x, item.position.y, 10, 10);
       }
       else if(item.imageType === 'circle'){
-        console.log('trying to draw circle');
         ctx.beginPath();
         ctx.arc(item.position.x,item.position.y,5,0,2*Math.PI);
         ctx.fill();
@@ -33,8 +36,13 @@ CanvasView.prototype = {
     }   
   },
 
-  focusOnDrawable: function(drawable){
-    this.focusedDrawable = drawable;
+  findFocusedControllable:function(){
+    return this.focusedControllable || this.controllables[0]
+  },
+
+
+  focusOn: function(controllable){
+    this.focusedControllable = controllable;
   },
 
   click: function(ev){
@@ -42,29 +50,24 @@ CanvasView.prototype = {
   },
 
   keyPress: function(ev){
-    var target = this.focusedDrawable
+    var target = this.findFocusedControllable();
+    var moveAmount = target.moveAmount();
     if (target){
       var adjust = {x:0,y:0}
-      console.log('key pressed', ev.keyCode)
       switch (ev.keyCode){
         case 38://up
-          console.log('up');
-          adjust = {x:0,y: -5}
+          adjust = {x:0,y: -moveAmount}
           break;
         case 40://down
-          console.log('down');
-          adjust = {x:0,y: 5}
+          adjust = {x:0,y: moveAmount}
           break;
         case 37://left
-          console.log('left');
-          adjust = {x:-5,y: 0}
+          adjust = {x:-moveAmount,y: 0}
           break;
         case 39://right
-          console.log('right');
-          adjust = {x:5,y: 0}
+          adjust = {x:moveAmount,y: 0}
           break;
         case 13:
-          console.log('enter')
           if (target.item){
             target.dropAll()
           }
@@ -75,10 +78,25 @@ CanvasView.prototype = {
             }
           }
           break;
+        case 17:
+          if (this.controllables.length > 1){
+            console.log('have more than one')
+            var index = this.controllables.indexOf(this.focusedControllable);
+            console.log('index', index)
+            if (index === this.controllables.length -1){
+              this.focusedControllable = this.controllables[0];
+            }
+            else{
+              this.focusedControllable = this.controllables[index+1];
+            }
+          }
+          break;
       }
-      var x = target.position.x + adjust.x;
-      var y = target.position.y + adjust.y;
-      target.changePosition({x:x,y:y});
+      // if( adjust.x != 0 && adjust.y != 0 ){
+        var x = target.position.x + adjust.x;
+        var y = target.position.y + adjust.y;
+        target.changePosition({x:x,y:y});
+      // }
     }
   }
 }

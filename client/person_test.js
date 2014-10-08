@@ -78,4 +78,14 @@ describe('Person', function(){
     assert.equal(p.item, null);
   })
 
+  it("should have a moveAmount", function(){
+    var p = new Person();
+    assert('moveAmount' in p);
+  })
+
+  it("should be controllable", function(){
+    var p = new Person();
+    assert.equal(!!p.controllable, true);
+  })  
+
 })

@@ -1,21 +1,26 @@
 var drawable = {
-  // mixing this in allow to be rendered by canvas view
-  // objects should describe a position, 
+  // mixing this in allow to added to a board and change position
   // an image for which to be drawn TODO
   // also possibly a pattern so they can eg walk TODO 
-  updateView: function(){
-    if(this.view){
-      this.view.render();
+  updateBoard: function(){
+    if(this.board){
+      this.board.updateView();
     }
   },
-  addView: function(view){
-    this.view = view;
-    view.addDrawable(this);
+  joinBoard: function(board){
+    this.board = board;
+    board.addDrawable(this);
   },
   changePosition: function(newPosition){
     this.position = newPosition;
-    this.updateView();
-  }
+    this.updateBoard();
+  },
+  movePosition: function(newPosition){
+    var x = this.position.x + newPosition.x
+    var y = this.position.y + newPosition.y
+    this.changePosition({x:x, y:y})
+    this.updateBoard();
+  },
 }
 
 module.exports = drawable

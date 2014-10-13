@@ -34,7 +34,7 @@ var proto = {
     if(this.item){
       this.item.position = newPosition;
     }
-    this.updateView();
+    this.updateBoard();
   },
 
   distanceFromSelf:function(item){

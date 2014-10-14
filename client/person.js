@@ -14,6 +14,7 @@ var proto = {
   skills: {
     "PickUp": "pickUpFirstCloseItem",
     "talk": "talk",
+    "drop": "dropAll",
   },
 
   moveAmount: function(){

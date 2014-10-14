@@ -4,6 +4,7 @@ var FocusedObjectView = function(el){
   this.headerEl = el.querySelector("#header");
   this.skillsEl = el.querySelector("#skills");
   this.keyPress = this.keyPress.bind(this);
+  this.skillClicked = this.skillClicked.bind(this);
   window.addEventListener('keydown',this.keyPress,false);
 
 }
@@ -13,13 +14,26 @@ FocusedObjectView.prototype = {
     this.board = board;
   },
   render: function(){
-    var focused =  this.board.findFocusedControllable()
-    this.headerEl.innerHTML = focused.name
-    var skills = []
+    var focused =  this.board.findFocusedControllable();
+    this.headerEl.innerHTML = focused.name;
+    this.skillsEl.innerHTML = "";
     for (skill in focused.skills){
-      skills.push(skill);
+      var skillButton = window.document.createElement('a');
+      // skillButton.onClick = this.skillClicked;
+      skillButton.addEventListener('click',this.skillClicked,false);
+      skillButton.innerHTML = skill;
+      console.log('this', this)
+      this.skillsEl.appendChild(skillButton);
     }
-    this.skillsEl.innerHTML = skills.join();
+  },
+
+  skillClicked: function(el){
+    console.log('skill was clicked this', this);
+    console.log('element', el);
+    var focused =  this.board.findFocusedControllable();
+    var methodName = focused.skills[el.target.innerHTML];
+    console.log('methodName', methodName);
+    focused[methodName]();
   },
 
   keyPress: function(ev){

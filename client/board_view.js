@@ -54,7 +54,7 @@ BoardView.prototype = {
             target.pickUpFirstCloseItem()
           }
           break;
-        case 17://shift
+        case 17://cttl
           this.board.focusOnNext()
           break;
       }

@@ -4,13 +4,17 @@ var Board = function(){
 }
 
 Board.prototype = {
-  setView: function(view){
-    this.view = view;
+  setView: function(view, viewName){
+    nameOfView = viewName || 'view'
+    this[nameOfView] = view
     view.setBoard(this);
   },
 
-  updateView: function(view){
-    this.view.render();
+  updateView: function(viewName){
+    nameOfView = viewName || 'view'
+    if (this[nameOfView]) {
+      this[nameOfView].render();
+    }
   },
 
   addDrawable: function(drawable){
@@ -22,6 +26,7 @@ Board.prototype = {
 
   focusOn: function(controllable){
     this.focusedControllable = controllable;
+    this.updateView('focusedView');
   },
 
   findFocusedControllable:function(){
@@ -36,10 +41,10 @@ Board.prototype = {
     if (this.controllables.length > 1){
       var index = this.controllables.indexOf(this.findFocusedControllable());
       if (index === this.controllables.length -1){
-        this.focusedControllable = this.controllables[0];
+        this.focusOn(this.controllables[0]);
       }
       else{
-        this.focusedControllable = this.controllables[index+1];
+        this.focusOn(this.controllables[index+1]);
       }
     }
   }

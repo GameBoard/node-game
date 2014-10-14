@@ -5,13 +5,17 @@ var Board = function(){
 }
 
 Board.prototype = {
-  setView: function(view){
-    this.view = view;
+  setView: function(view, viewName){
+    nameOfView = viewName || 'view'
+    this[nameOfView] = view
     view.setBoard(this);
   },
 
-  updateView: function(view){
-    this.view.render();
+  updateView: function(viewName){
+    nameOfView = viewName || 'view'
+    if (this[nameOfView]) {
+      this[nameOfView].render();
+    }
   },
 
   addDrawable: function(drawable){
@@ -23,6 +27,7 @@ Board.prototype = {
 
   focusOn: function(controllable){
     this.focusedControllable = controllable;
+    this.updateView('focusedView');
   },
 
   findFocusedControllable:function(){
@@ -37,10 +42,10 @@ Board.prototype = {
     if (this.controllables.length > 1){
       var index = this.controllables.indexOf(this.findFocusedControllable());
       if (index === this.controllables.length -1){
-        this.focusedControllable = this.controllables[0];
+        this.focusOn(this.controllables[0]);
       }
       else{
-        this.focusedControllable = this.controllables[index+1];
+        this.focusOn(this.controllables[index+1]);
       }
     }
   }
@@ -104,7 +109,7 @@ BoardView.prototype = {
             target.pickUpFirstCloseItem()
           }
           break;
-        case 17://shift
+        case 17://cttl
           this.board.focusOnNext()
           break;
       }
@@ -141,6 +146,20 @@ var drawable = {
 
 module.exports = drawable
 },{}],4:[function(require,module,exports){
+var FocusedObjectView = function(el){
+  this.el = el;
+}
+
+FocusedObjectView.prototype = {
+  setBoard: function(board){
+    this.board = board;
+  },
+  render: function(){
+    this.el.innerHTML = this.board.findFocusedControllable().name;
+  },
+}
+module.exports = FocusedObjectView
+},{}],5:[function(require,module,exports){
 var lib = require('./lib');
 var drawable = require('./drawable');
 
@@ -156,7 +175,7 @@ Item.prototype = {
 lib.extend(Item.prototype, drawable)
 
 module.exports = Item
-},{"./drawable":3,"./lib":5}],5:[function(require,module,exports){
+},{"./drawable":3,"./lib":6}],6:[function(require,module,exports){
 var lib = {
   extend: function(destination, source) {
     for (var k in source) {
@@ -177,7 +196,7 @@ var lib = {
 }
 
 module.exports = lib;
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var lib = require('./lib');
 var drawable = require('./drawable');
 
@@ -252,35 +271,37 @@ lib.extend(Person.prototype, drawable)
 lib.extend(Person.prototype, proto)
 
 module.exports = Person
-},{"./drawable":3,"./lib":5}],7:[function(require,module,exports){
+},{"./drawable":3,"./lib":6}],8:[function(require,module,exports){
 var Person = require("./person.js");
 var Item = require("./item.js");
 var BoardView = require("./board_view.js");
 var Board = require("./board.js");
-// var FocusedObjectView = require("./focused_object_view.js");
+var FocusedObjectView = require("./focused_object_view.js");
 
 
 window.onload = function(){
 
   var canvas = document.getElementById('playground');
-  // var focusedDiv = document.getElementById('focused_object');
+  var focusedDiv = document.getElementById('focused_object');
   var board = new Board();
   var boardView = new BoardView(canvas);
 
   board.setView(boardView)
-  // var focusedView = new FocusedObjectView(focusedDiv);
+  var focusedView = new FocusedObjectView(focusedDiv);
+  board.setView(focusedView, 'focusedView')
   
   var box = new Item();
-  var person = new Person();
-  var person2 = new Person({position:{x:30,y:30}});
+  var person = new Person({name: "dodo"});
+  var person2 = new Person({name: "lala", position:{x:30,y:30}});
 
   person.joinBoard(board);
   person2.joinBoard(board);
   box.joinBoard(board);
 
   board.updateView();
+  board.updateView('focusedView');
 
   window.person = person;
   window.box = box; 
 }
-},{"./board.js":1,"./board_view.js":2,"./item.js":4,"./person.js":6}]},{},[7]);
+},{"./board.js":1,"./board_view.js":2,"./focused_object_view.js":4,"./item.js":5,"./person.js":7}]},{},[8]);

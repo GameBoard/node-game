@@ -11,6 +11,13 @@ describe('Board', function(){
     assert.equal(b.view, view);     
   })
 
+  it('should be able set view with name', function(){  
+    var b = new Board()
+    view = {setBoard:sinon.spy()}
+    b.setView(view, 'namedView');
+    assert.equal(b.namedView, view);     
+  })
+
   it('should set itself on view when setting view ', function(){
     view = {setBoard: sinon.spy()}
     var b = new Board()
@@ -53,6 +60,7 @@ describe('Board', function(){
     assert.equal(board.focusedControllable, controllable);
   })
 
+
   it('should find first controllable focused if focused not set ', function(){ 
     var board = new Board();
     var controllable = {controllable: true};
@@ -79,4 +87,15 @@ describe('Board', function(){
     board.focusOnNext();
     assert.equal(board.findFocusedControllable(), controllable2);
   })
+
+  it('should update focused view when focus on controlllable', function(){ 
+    var board = new Board();
+    view = {setBoard:sinon.spy(), render:sinon.spy(), }
+    board.setView(view, 'focusedView');
+    var controllable = {controllable: true};
+    var spy = sinon.spy(board, "updateView"); // TODO test named passed in
+    board.focusOn(controllable)
+    assert(spy.calledOnce);
+  })
+
 })

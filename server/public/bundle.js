@@ -31,15 +31,25 @@ Board.prototype = {
 
   moveFocused:function(positionChange){
     this.findFocusedControllable().movePosition(positionChange);
+  },
+
+  focusOnNext:function(){
+    if (this.controllables.length > 1){
+      var index = this.controllables.indexOf(this.findFocusedControllable());
+      if (index === this.controllables.length -1){
+        this.focusedControllable = this.controllables[0];
+      }
+      else{
+        this.focusedControllable = this.controllables[index+1];
+      }
+    }
   }
 }
 
 module.exports = Board
 },{}],2:[function(require,module,exports){
-var BoardView = function(canvas, board){
+var BoardView = function(canvas){
   this.canvas = canvas;
-  this.board = board;
-
   this.keyPress = this.keyPress.bind(this);
   window.addEventListener('keydown',this.keyPress,false);
   
@@ -91,27 +101,11 @@ BoardView.prototype = {
             target.dropAll()
           }
           else {
-            //TODO move to person
-            item = target.findItemsInReach(this.board.drawables)[0]
-            if(item){
-              target.pickUpItem(item);
-            }
+            target.pickUpFirstCloseItem()
           }
           break;
         case 17://shift
-          //move this to board
-          // this.board.changeControllable()
-          if (this.board.controllables.length > 1){
-            console.log('have more than one')
-            var index = this.board.controllables.indexOf(this.board.focusedControllable);
-            console.log('index', index)
-            if (index === this.board.controllables.length -1){
-              this.board.focusedControllable = this.board.controllables[0];
-            }
-            else{
-              this.board.focusedControllable = this.board.controllables[index+1];
-            }
-          }
+          this.board.focusOnNext()
           break;
       }
     }
@@ -244,6 +238,13 @@ var proto = {
 
   dropAll: function(){
     this.item = null;
+  },
+
+  //board interface
+
+  pickUpFirstCloseItem:function(){
+    var firstCloseItem = this.findItemsInReach(this.board.drawables)[0];
+    firstCloseItem && this.pickUpItem(firstCloseItem);
   }
 }
 

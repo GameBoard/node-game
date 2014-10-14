@@ -58,6 +58,13 @@ var proto = {
 
   dropAll: function(){
     this.item = null;
+  },
+
+  //board interface
+
+  pickUpFirstCloseItem:function(){
+    var firstCloseItem = this.findItemsInReach(this.board.drawables)[0];
+    firstCloseItem && this.pickUpItem(firstCloseItem);
   }
 }
 

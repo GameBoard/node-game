@@ -39,7 +39,7 @@ describe('Board', function(){
   })
 
   it('should be able to add controllable and set as controllable', function(){ 
-    var board = new Board;
+    var board = new Board();
     var controllableObject = {controllable: true};
     board.addDrawable(controllableObject)
     assert.equal(board.drawables.length, 1);
@@ -47,25 +47,36 @@ describe('Board', function(){
   })
 
   it('should be able focus on controllable', function(){ 
-    var board = new Board;
+    var board = new Board();
     var controllable = {controllable: true};
     board.focusOn(controllable)
     assert.equal(board.focusedControllable, controllable);
   })
 
   it('should find first controllable focused if focused not set ', function(){ 
-    var board = new Board;
+    var board = new Board();
     var controllable = {controllable: true};
     board.addDrawable(controllable)
     assert.equal(board.findFocusedControllable(), controllable);
   })
 
   it('should be able to move focused object ', function(){ 
-    var board = new Board;
+    var board = new Board();
     var controllable = {controllable: true, movePosition: sinon.spy()};
     board.addDrawable(controllable)
     var positionChange = {x:10,y:10}
     board.moveFocused(positionChange)
     assert(controllable.movePosition.called);
+  })
+
+  it('should be able shift focus through controllables', function(){
+    var board = new Board();
+    var controllable = {controllable: true, movePosition: sinon.spy()};
+    var controllable2 = {controllable: true, movePosition: sinon.spy()};
+    board.addDrawable(controllable);
+    board.addDrawable(controllable2);
+    assert.equal(board.findFocusedControllable(), controllable);
+    board.focusOnNext();
+    assert.equal(board.findFocusedControllable(), controllable2);
   })
 })

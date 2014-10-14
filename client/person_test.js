@@ -25,8 +25,8 @@ describe('Person', function(){
 
   it('shoud be a drawable', function(){
     var p = new Person();
-    assert('updateView' in p);
-    assert('addView' in p);
+    assert('updateBoard' in p);
+    assert('joinBoard' in p);
   })
 
   it("should be able to pick up an item", function(){
@@ -86,6 +86,8 @@ describe('Person', function(){
   it("should be controllable", function(){
     var p = new Person();
     assert.equal(!!p.controllable, true);
-  })  
+  })
+
+ 
 
 })

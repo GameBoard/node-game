@@ -30,6 +30,18 @@ Board.prototype = {
 
   moveFocused:function(positionChange){
     this.findFocusedControllable().movePosition(positionChange);
+  },
+
+  focusOnNext:function(){
+    if (this.controllables.length > 1){
+      var index = this.controllables.indexOf(this.findFocusedControllable());
+      if (index === this.controllables.length -1){
+        this.focusedControllable = this.controllables[0];
+      }
+      else{
+        this.focusedControllable = this.controllables[index+1];
+      }
+    }
   }
 }
 

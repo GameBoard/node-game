@@ -1,7 +1,5 @@
-var BoardView = function(canvas, board){
+var BoardView = function(canvas){
   this.canvas = canvas;
-  this.board = board;
-
   this.keyPress = this.keyPress.bind(this);
   window.addEventListener('keydown',this.keyPress,false);
   
@@ -53,27 +51,11 @@ BoardView.prototype = {
             target.dropAll()
           }
           else {
-            //TODO move to person
-            item = target.findItemsInReach(this.board.drawables)[0]
-            if(item){
-              target.pickUpItem(item);
-            }
+            target.pickUpFirstCloseItem()
           }
           break;
         case 17://shift
-          //move this to board
-          // this.board.changeControllable()
-          if (this.board.controllables.length > 1){
-            console.log('have more than one')
-            var index = this.board.controllables.indexOf(this.board.focusedControllable);
-            console.log('index', index)
-            if (index === this.board.controllables.length -1){
-              this.board.focusedControllable = this.board.controllables[0];
-            }
-            else{
-              this.board.focusedControllable = this.board.controllables[index+1];
-            }
-          }
+          this.board.focusOnNext()
           break;
       }
     }

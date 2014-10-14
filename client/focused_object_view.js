@@ -1,5 +1,8 @@
 var FocusedObjectView = function(el){
-  this.el = el;
+  this.mainEl = el;
+  console.log('el', el)
+  this.headerEl = el.querySelector("#header");
+  this.skillsEl = el.querySelector("#skills");
 }
 
 FocusedObjectView.prototype = {
@@ -7,7 +10,13 @@ FocusedObjectView.prototype = {
     this.board = board;
   },
   render: function(){
-    this.el.innerHTML = this.board.findFocusedControllable().name;
+    var focused =  this.board.findFocusedControllable()
+    this.headerEl.innerHTML = focused.name
+    var skills = []
+    for (skill in focused.skills){
+      skills.push(skill);
+    }
+    this.skillsEl.innerHTML = skills.join();
   },
 }
 module.exports = FocusedObjectView

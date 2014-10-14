@@ -11,6 +11,11 @@ var Person = function(options){
 }
 
 var proto = {
+  skills: {
+    "PickUp": "pickUpFirstCloseItem",
+    "talk": "talk",
+  },
+
   moveAmount: function(){
     var moveAmount = this.speed;
     if(this.item && this.item.weight){

@@ -147,7 +147,10 @@ var drawable = {
 module.exports = drawable
 },{}],4:[function(require,module,exports){
 var FocusedObjectView = function(el){
-  this.el = el;
+  this.mainEl = el;
+  console.log('el', el)
+  this.headerEl = el.querySelector("#header");
+  this.skillsEl = el.querySelector("#skills");
 }
 
 FocusedObjectView.prototype = {
@@ -155,7 +158,13 @@ FocusedObjectView.prototype = {
     this.board = board;
   },
   render: function(){
-    this.el.innerHTML = this.board.findFocusedControllable().name;
+    var focused =  this.board.findFocusedControllable()
+    this.headerEl.innerHTML = focused.name
+    var skills = []
+    for (skill in focused.skills){
+      skills.push(skill);
+    }
+    this.skillsEl.innerHTML = skills.join();
   },
 }
 module.exports = FocusedObjectView
@@ -210,6 +219,11 @@ var Person = function(options){
 }
 
 var proto = {
+  skills: {
+    "PickUp": "pickUpFirstCloseItem",
+    "talk": "talk",
+  },
+
   moveAmount: function(){
     var moveAmount = this.speed;
     if(this.item && this.item.weight){

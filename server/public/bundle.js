@@ -143,12 +143,14 @@ FocusedObjectView.prototype = {
     this.headerEl.innerHTML = focused.name;
     this.skillsEl.innerHTML = "";
     for (skill in focused.skills){
+      var skillItem = window.document.createElement('li');
       var skillButton = window.document.createElement('a');
       // skillButton.onClick = this.skillClicked;
       skillButton.addEventListener('click',this.skillClicked,false);
       skillButton.innerHTML = skill;
-      console.log('this', this)
-      this.skillsEl.appendChild(skillButton);
+      console.log('this', this);
+      skillItem.appendChild(skillButton);
+      this.skillsEl.appendChild(skillItem);
     }
   },
 

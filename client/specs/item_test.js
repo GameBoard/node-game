@@ -1,6 +1,6 @@
 var assert = require("assert");
 var sinon = require('sinon');
-var Item = require('./item.js');
+var Item = require('../item.js');
 
 describe('Item', function(){
 

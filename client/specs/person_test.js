@@ -1,6 +1,6 @@
 var assert = require("assert");
 var sinon = require('sinon');
-var Person = require('./person.js');
+var Person = require('../person.js');
 
 describe('Person', function(){
   it('should be called default by default', function(){

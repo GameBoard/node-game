@@ -9,6 +9,7 @@ window.onload = function(){
 
   var canvas = document.getElementById('playground');
   var focusedDiv = document.getElementById('focused_object');
+
   var board = new Board();
   var boardView = new BoardView(canvas);
 
@@ -17,7 +18,7 @@ window.onload = function(){
   board.setView(focusedView, 'focusedView')
   
   var box = new Item();
-  var person = new Person({name: "dodo"});
+  var person = new Person({name: "dodo");
   var person2 = new Person({name: "lala", position:{x:30,y:30}});
 
   person.joinBoard(board);

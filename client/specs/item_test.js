@@ -1,6 +1,6 @@
 var assert = require("assert");
 var sinon = require('sinon');
-var Item = require('../item.js');
+var Item = require('../models/item.js');
 
 describe('Item', function(){
 
@@ -11,8 +11,8 @@ describe('Item', function(){
 
   it('shoud be a drawable', function(){
     i = new Item();
-    assert('updateView' in i);
-    assert('addView' in i);
+    assert('updateBoard' in i);
+    assert('joinBoard' in i);
   })
 
   it('shoud have a position', function(){

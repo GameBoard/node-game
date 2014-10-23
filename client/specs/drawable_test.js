@@ -1,6 +1,6 @@
 var assert = require("assert");
 var sinon = require('sinon');
-var drawable = require('../drawable.js');
+var drawable = require('../modules/drawable.js');
 
 describe('Drawable', function(){
 
@@ -28,6 +28,17 @@ describe('Drawable', function(){
     assert.equal(drawable.position.x, 5);
     assert.equal(drawable.position.y, 10);
   })
+
+  // it("should move items if it has them", function(){
+  //   var target = {position:{x:0,y:0}, reach:20};
+  //   lib.extend(target, lifter);
+  //   var spy = sinon.spy(target, "updateBoard");
+  //   var i = {position:{x:10,y:10}};
+  //   target.pickUpItem(i);
+  //   target.changePosition({x:20,y:20});
+  //   assert.equal(i.position.x, 20);
+  //   assert.equal(i.position.y, 20);
+  // })
 
   it('should be moveable relatively', function(){
     drawable.changePosition({x:10,y:10});

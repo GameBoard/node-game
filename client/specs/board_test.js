@@ -1,5 +1,5 @@
 var assert = require("assert");
-var Board = require('../board.js');
+var Board = require('../models/board.js');
 var sinon = require('sinon');
 
 

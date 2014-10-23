@@ -13,13 +13,15 @@ var drawable = {
   },
   changePosition: function(newPosition){
     this.position = newPosition;
+    if(this.item){
+      this.item.position = newPosition;
+    }
     this.updateBoard();
   },
   movePosition: function(newPosition){
     var x = this.position.x + newPosition.x
     var y = this.position.y + newPosition.y
     this.changePosition({x:x, y:y})
-    this.updateBoard();
   },
 }
 

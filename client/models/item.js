@@ -1,5 +1,5 @@
-var lib = require('./lib');
-var drawable = require('./drawable');
+var lib = require('../lib');
+var drawable = require('../modules/drawable');
 
 var Item = function(position){
   this.position = position || {x:0, y:0}

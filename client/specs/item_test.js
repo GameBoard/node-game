@@ -9,7 +9,7 @@ describe('Item', function(){
     assert.equal(!!i.controllable, false);
   })  
 
-  it('shoud be a drawable', function(){
+  it('shoud be a plotable', function(){
     i = new Item();
     assert('updateBoard' in i);
     assert('joinBoard' in i);

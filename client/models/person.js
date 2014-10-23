@@ -1,5 +1,5 @@
 var lib = require('../lib');
-var drawable = require('../modules/drawable');
+var plotable = require('../modules/plotable');
 
 var Person = function(options){
   var options = options || {}
@@ -8,38 +8,19 @@ var Person = function(options){
   this.imageType = 'circle';
   this.speed = options.speed || 5;
   this.controllable = true;
+  this.reach = options.reach || 20;
 }
 
 var proto = {
   //person should be a learner only thing inherit to all people
-
   learnSkills: function(skillModule){
+    var skills = this.skills || {}
     lib.extend(this, skillModule)
-    this.skills.concat(skillModule.skills)
+    this.skills = lib.extend(skills, skillModule.skills)
   },
-
-  skills: {
-    "PickUp": "pickUpFirstCloseItem",
-    "drop": "dropAll",
-  },
-
-
-  //lifter
-  moveAmount: function(){
-    var moveAmount = this.speed;
-    if(this.item && this.item.weight){
-      moveAmount = moveAmount - this.item.weight
-    }
-    return moveAmount;
-  },
-
-
-
-
-
 }
 
-lib.extend(Person.prototype, drawable)
 lib.extend(Person.prototype, proto)
+lib.extend(Person.prototype, plotable)
 
 module.exports = Person

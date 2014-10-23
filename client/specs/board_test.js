@@ -33,23 +33,23 @@ describe('Board', function(){
     assert(view.render.calledOnce);
   })
 
-  it('should be created a list of drawables', function(){
+  it('should be created a list of plotables', function(){
     var board = new Board();
-    assert.equal(board.drawables.length, 0);
+    assert.equal(board.plotables.length, 0);
   })
 
-  it('should be able to add drawable', function(){ 
+  it('should be able to add plotable', function(){ 
     var board = new Board;
-    var drawableObject = {};
-    board.addDrawable(drawableObject)
-    assert.equal(board.drawables.length, 1);
+    var plotableObject = {};
+    board.addPlotable(plotableObject)
+    assert.equal(board.plotables.length, 1);
   })
 
   it('should be able to add controllable and set as controllable', function(){ 
     var board = new Board();
     var controllableObject = {controllable: true};
-    board.addDrawable(controllableObject)
-    assert.equal(board.drawables.length, 1);
+    board.addPlotable(controllableObject)
+    assert.equal(board.plotables.length, 1);
     assert.equal(board.controllables.length, 1);
   })
 
@@ -64,14 +64,14 @@ describe('Board', function(){
   it('should find first controllable focused if focused not set ', function(){ 
     var board = new Board();
     var controllable = {controllable: true};
-    board.addDrawable(controllable)
+    board.addPlotable(controllable)
     assert.equal(board.findFocusedControllable(), controllable);
   })
 
   it('should be able to move focused object ', function(){ 
     var board = new Board();
     var controllable = {controllable: true, movePosition: sinon.spy()};
-    board.addDrawable(controllable)
+    board.addPlotable(controllable)
     var positionChange = {x:10,y:10}
     board.moveFocused(positionChange)
     assert(controllable.movePosition.called);
@@ -81,8 +81,8 @@ describe('Board', function(){
     var board = new Board();
     var controllable = {controllable: true, movePosition: sinon.spy()};
     var controllable2 = {controllable: true, movePosition: sinon.spy()};
-    board.addDrawable(controllable);
-    board.addDrawable(controllable2);
+    board.addPlotable(controllable);
+    board.addPlotable(controllable2);
     assert.equal(board.findFocusedControllable(), controllable);
     board.focusOnNext();
     assert.equal(board.findFocusedControllable(), controllable2);

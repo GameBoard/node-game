@@ -2,8 +2,7 @@ var BoardView = function(canvas){
   this.canvas = canvas;
   this.keyPress = this.keyPress.bind(this);
   window.addEventListener('keydown',this.keyPress,false);
-  
-  
+    
 }
 
 BoardView.prototype = {
@@ -16,9 +15,9 @@ BoardView.prototype = {
     var ctx = this.canvas.getContext("2d");
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     ctx.fillStyle = "rgb(200,0,0)";
-    numDrawables = this.board.drawables.length;
-    for(var i=0; i<numDrawables; i++){
-      var item = this.board.drawables[i];
+    numPlotables = this.board.plotables.length;
+    for(var i=0; i<numPlotables; i++){
+      var item = this.board.plotables[i];
       if (item.imageType === 'square'){
         ctx.fillRect(item.position.x, item.position.y, 10, 10);
       }

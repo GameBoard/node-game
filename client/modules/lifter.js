@@ -12,11 +12,13 @@ var lifter = {
 
   findItemsInReach: function(items){
     var inReach = [];
+    console.log('looking through items', items)
     items.forEach(function(item){
       if(item !== this && this.itemInReach(item)){
         inReach.push(item)
       }
     }, this);
+    console.log('itesm in reach returning', inReach)
     return inReach;
   },
 
@@ -31,11 +33,14 @@ var lifter = {
   },
 
   pickUpFirstCloseItem:function(){
-    var firstCloseItem = this.findItemsInReach(this.board.drawables)[0];
+    var firstCloseItem = this.findItemsInReach(this.board.plotables)[0];
     firstCloseItem && this.pickUpItem(firstCloseItem);
   },
 
-
+  skills: {
+    "PickUp": "pickUpFirstCloseItem",
+    "Drop": "dropAll",
+  },
 }
 
 module.exports = lifter

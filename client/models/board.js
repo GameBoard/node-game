@@ -1,5 +1,5 @@
 var Board = function(){
-  this.drawables = [];
+  this.plotables = [];
   this.controllables = [];
 }
 
@@ -17,10 +17,10 @@ Board.prototype = {
     }
   },
 
-  addDrawable: function(drawable){
-    this.drawables.push(drawable);
-    if (drawable.controllable){
-      this.controllables.push(drawable);
+  addPlotable: function(plotable){
+    this.plotables.push(plotable);
+    if (plotable.controllable){
+      this.controllables.push(plotable);
     }
   },
 

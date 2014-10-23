@@ -41,20 +41,20 @@ FocusedObjectView.prototype = {
   keyPress: function(ev){
     console.log('key press', ev.keyCode)
     var target = this.board.findFocusedControllable();
-    var moveAmount = target.moveAmount();
+    console.log('target', target)
     if (target){
       switch (ev.keyCode){
         case 87: //38://up
-          target.movePosition({x:0,y: -moveAmount})
+          target.walk({direction:'up'})
           break;
         case 83://40://down
-          target.movePosition({x:0,y: moveAmount})
+          target.walk({direction:'down'})
           break;
         case 65://37://left
-          target.movePosition({x:-moveAmount,y: 0})
+          target.walk({direction:'left'})
           break;
         case 68://39://right
-          target.movePosition({x:moveAmount,y: 0})
+          target.walk({direction:'right'})
           break;
         case 13://enter
           if (target.item){

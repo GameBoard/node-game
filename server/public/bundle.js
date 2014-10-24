@@ -98,9 +98,10 @@ var Person = function(options){
   this.name = options.name || "default";
   this.position = options.position || {x:20, y:20};
   this.imageType = 'circle';
-  this.speed = options.speed || 5;
+  this.speed = options.speed || 10;
   this.controllable = true;
   this.reach = options.reach || 20;
+  this.weight = options.weight || 4;
 }
 
 var proto = {
@@ -145,6 +146,14 @@ var lifter = {
     if(this.itemInReach(item)){
       this.item = item;
     }
+  },
+
+  totalWeight: function(){
+    sumWeight = this.weight;
+    if (this.item) {
+      sumWeight += this.item.weight
+    }
+    return (sumWeight);
   },
 
   dropAll: function(){
@@ -215,8 +224,8 @@ walker = {
 
   strideDistance: function(){
     var speed = this.speed || 1
-    var weight = this.weight || 0
-    var moveAmount = speed + weight;
+    var weight = (this.totalWeight && this.totalWeight()) || this.weight || 0
+    var moveAmount = Math.max(speed - weight, 0);
     return moveAmount;
   }
 

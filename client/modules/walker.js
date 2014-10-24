@@ -21,8 +21,8 @@ walker = {
 
   strideDistance: function(){
     var speed = this.speed || 1
-    var weight = this.weight || 0
-    var moveAmount = speed + weight;
+    var weight = (this.totalWeight && this.totalWeight()) || this.weight || 0
+    var moveAmount = Math.max(speed - weight, 0);
     return moveAmount;
   }
 

@@ -41,6 +41,14 @@ describe('Lifter', function(){
     assert.equal(target.item, i);
   })
 
+  it("should include item weight in total weight", function(){
+    var target = {position:{x:0,y:0}, reach:20, weight:10};
+    lib.extend(target, lifter)
+    var i = {position:{x:5,y:5}, weight:5};
+    target.pickUpItem(i);
+    assert.equal(target.totalWeight(), 15);
+  })
+
   it("shouldn't be able to pick up an item out of reach", function(){
     var target = {position:{x:0,y:0}, reach:20};
     lib.extend(target, lifter)

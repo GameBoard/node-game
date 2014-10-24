@@ -28,6 +28,14 @@ var lifter = {
     }
   },
 
+  totalWeight: function(){
+    sumWeight = this.weight;
+    if (this.item) {
+      sumWeight += this.item.weight
+    }
+    return (sumWeight);
+  },
+
   dropAll: function(){
     this.item = null;
   },

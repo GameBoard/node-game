@@ -16,6 +16,25 @@ describe('Walker', function(){
     assert.equal(target.strideDistance(), 10);
   })
 
+
+  it("'s stride should be affected by weight", function(){
+    var target = {speed:10, weight:5};
+    lib.extend(target, walker);
+    assert.equal(target.strideDistance(), 5);
+  })
+
+  it("'s stride should not go negative", function(){
+    var target = {speed:10, weight:15};
+    lib.extend(target, walker);
+    assert.equal(target.strideDistance(), 0);
+  })
+
+  it("'s stride will look at total weight first", function(){
+    var target = {speed:30, weight:10, totalWeight:function(){return 20}};
+    lib.extend(target, walker);
+    assert.equal(target.strideDistance(), (30-20));
+  })
+
   it("should be able to move up", function(){
     var target = {speed:10, movePosition:sinon.spy()};
     lib.extend(target, walker);

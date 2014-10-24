@@ -12,13 +12,11 @@ var lifter = {
 
   findItemsInReach: function(items){
     var inReach = [];
-    console.log('looking through items', items)
     items.forEach(function(item){
       if(item !== this && this.itemInReach(item)){
         inReach.push(item)
       }
     }, this);
-    console.log('itesm in reach returning', inReach)
     return inReach;
   },
 

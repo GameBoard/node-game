@@ -26,7 +26,6 @@ window.onload = function(){
   person.learnSkills(walker)
 
   var person2 = new Person({name: "lala", position:{x:30,y:30}});
-  // person2.learnSkills(lifter)
   person2.learnSkills(walker)
   
   person.joinBoard(board);

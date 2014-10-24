@@ -23,7 +23,7 @@ module.exports = lib;
 var Board = function(){
   this.plotables = [];
   this.controllables = [];
-  this.width = 800 
+  this.width = 800 // todo find nice way to only put this one place
   this.height = 400
 }
 
@@ -134,13 +134,11 @@ var lifter = {
 
   findItemsInReach: function(items){
     var inReach = [];
-    console.log('looking through items', items)
     items.forEach(function(item){
       if(item !== this && this.itemInReach(item)){
         inReach.push(item)
       }
     }, this);
-    console.log('itesm in reach returning', inReach)
     return inReach;
   },
 
@@ -272,7 +270,7 @@ window.onload = function(){
 
   var person2 = new Person({name: "lala", position:{x:30,y:30}});
   // person2.learnSkills(lifter)
-  person2.learnSkills(walker)
+  // person2.learnSkills()
   
   person.joinBoard(board);
   person2.joinBoard(board);
@@ -323,16 +321,16 @@ BoardView.prototype = {
         this.board.focusOnNext()
         break;
       case 87: //38://up
-        target.walk({direction:'up'})
+        target.walk && target.walk({direction:'up'})
         break;
       case 83://40://down
-        target.walk({direction:'down'})
+        target.walk && target.walk({direction:'down'})
         break;
       case 65://37://left
-        target.walk({direction:'left'})
+        target.walk && target.walk({direction:'left'})
         break;
       case 68://39://right
-        target.walk({direction:'right'})
+        target.walk && target.walk({direction:'right'})
         break;     
     }
   }

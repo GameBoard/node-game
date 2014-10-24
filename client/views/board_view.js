@@ -36,16 +36,16 @@ BoardView.prototype = {
         this.board.focusOnNext()
         break;
       case 87: //38://up
-        target.walk({direction:'up'})
+        target.walk && target.walk({direction:'up'})
         break;
       case 83://40://down
-        target.walk({direction:'down'})
+        target.walk && target.walk({direction:'down'})
         break;
       case 65://37://left
-        target.walk({direction:'left'})
+        target.walk && target.walk({direction:'left'})
         break;
       case 68://39://right
-        target.walk({direction:'right'})
+        target.walk && target.walk({direction:'right'})
         break;     
     }
   }

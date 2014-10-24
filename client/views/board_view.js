@@ -1,8 +1,7 @@
 var BoardView = function(canvas){
   this.canvas = canvas;
   this.keyPress = this.keyPress.bind(this);
-  window.addEventListener('keydown',this.keyPress,false);
-    
+  window.addEventListener('keydown',this.keyPress,false);  
 }
 
 BoardView.prototype = {
@@ -30,10 +29,23 @@ BoardView.prototype = {
   },
 
   keyPress: function(ev){
+    var target = this.board.findFocusedControllable();
     switch (ev.keyCode){
       case 17://cttl
         this.board.focusOnNext()
         break;
+      case 87: //38://up
+        target.walk({direction:'up'})
+        break;
+      case 83://40://down
+        target.walk({direction:'down'})
+        break;
+      case 65://37://left
+        target.walk({direction:'left'})
+        break;
+      case 68://39://right
+        target.walk({direction:'right'})
+        break;     
     }
   }
 }

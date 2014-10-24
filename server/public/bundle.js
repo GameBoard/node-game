@@ -279,8 +279,7 @@ window.onload = function(){
 var BoardView = function(canvas){
   this.canvas = canvas;
   this.keyPress = this.keyPress.bind(this);
-  window.addEventListener('keydown',this.keyPress,false);
-    
+  window.addEventListener('keydown',this.keyPress,false);  
 }
 
 BoardView.prototype = {
@@ -308,10 +307,23 @@ BoardView.prototype = {
   },
 
   keyPress: function(ev){
+    var target = this.board.findFocusedControllable();
     switch (ev.keyCode){
       case 17://cttl
         this.board.focusOnNext()
         break;
+      case 87: //38://up
+        target.walk({direction:'up'})
+        break;
+      case 83://40://down
+        target.walk({direction:'down'})
+        break;
+      case 65://37://left
+        target.walk({direction:'left'})
+        break;
+      case 68://39://right
+        target.walk({direction:'right'})
+        break;     
     }
   }
 }
@@ -320,13 +332,9 @@ module.exports = BoardView;
 },{}],10:[function(require,module,exports){
 var FocusedObjectView = function(el){
   this.mainEl = el;
-  console.log('el', el)
   this.headerEl = el.querySelector("#header");
   this.skillsEl = el.querySelector("#skills");
-  this.keyPress = this.keyPress.bind(this);
   this.skillClicked = this.skillClicked.bind(this);
-  window.addEventListener('keydown',this.keyPress,false);
-
 }
 
 FocusedObjectView.prototype = {
@@ -340,7 +348,6 @@ FocusedObjectView.prototype = {
     for (skill in focused.skills){
       var skillItem = window.document.createElement('li');
       var skillButton = window.document.createElement('a');
-      // skillButton.onClick = this.skillClicked;
       skillButton.addEventListener('click',this.skillClicked,false);
       skillButton.innerHTML = skill;
       console.log('this', this);
@@ -356,39 +363,6 @@ FocusedObjectView.prototype = {
     var methodName = focused.skills[el.target.innerHTML];
     console.log('methodName', methodName);
     focused[methodName]();
-  },
-
-  keyPress: function(ev){
-    console.log('key press', ev.keyCode)
-    var target = this.board.findFocusedControllable();
-    console.log('target', target)
-    if (target){
-      switch (ev.keyCode){
-        case 87: //38://up
-          target.walk({direction:'up'})
-          break;
-        case 83://40://down
-          target.walk({direction:'down'})
-          break;
-        case 65://37://left
-          target.walk({direction:'left'})
-          break;
-        case 68://39://right
-          target.walk({direction:'right'})
-          break;
-        case 13://enter
-          if (target.item){
-            target.dropAll()
-          }
-          else {
-            target.pickUpFirstCloseItem()
-          }
-          break;
-        // case 17://cttl
-        //   this.board.focusOnNext()
-        //   break;
-      }
-    }
   }
 }
 module.exports = FocusedObjectView

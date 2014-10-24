@@ -1,6 +1,8 @@
 var Board = function(){
   this.plotables = [];
   this.controllables = [];
+  this.width = 800 // todo find nice way to only put this one place
+  this.height = 400
 }
 
 Board.prototype = {

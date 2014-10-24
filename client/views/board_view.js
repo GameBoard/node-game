@@ -1,7 +1,8 @@
 var BoardView = function(canvas){
   this.canvas = canvas;
   this.keyPress = this.keyPress.bind(this);
-  window.addEventListener('keydown',this.keyPress,false);  
+  window.addEventListener('keydown',this.keyPress,false);
+  this.boundary = 5;
 }
 
 BoardView.prototype = {

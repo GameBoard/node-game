@@ -76,6 +76,21 @@ Board.prototype = {
 
 module.exports = Board
 },{}],3:[function(require,module,exports){
+var lib = require('../lib')
+var plotable = require('../modules/plotable')
+
+var Door = function(options){
+  var options = options || {};
+  this.position = options.position || {x:0,y:0};
+  this.imageType = 'rec';
+  this.unliftable = true;
+
+}
+
+lib.extend(Door.prototype, plotable)
+
+module.exports = Door;
+},{"../lib":1,"../modules/plotable":7}],4:[function(require,module,exports){
 var lib = require('../lib');
 var plotable = require('../modules/plotable');
 
@@ -91,7 +106,7 @@ Item.prototype = {
 lib.extend(Item.prototype, plotable)
 
 module.exports = Item
-},{"../lib":1,"../modules/plotable":6}],4:[function(require,module,exports){
+},{"../lib":1,"../modules/plotable":7}],5:[function(require,module,exports){
 var lib = require('../lib');
 var plotable = require('../modules/plotable');
 
@@ -119,7 +134,7 @@ lib.extend(Person.prototype, proto)
 lib.extend(Person.prototype, plotable)
 
 module.exports = Person
-},{"../lib":1,"../modules/plotable":6}],5:[function(require,module,exports){
+},{"../lib":1,"../modules/plotable":7}],6:[function(require,module,exports){
 var lib = require('../lib')
 
 var lifter = {
@@ -132,10 +147,14 @@ var lifter = {
     return this.distanceFromSelf(item) <= this.reach;
   },
 
+  itemLiftable:function(item){
+    return !item.unliftable;
+  },
+
   findItemsInReach: function(items){
     var inReach = [];
     items.forEach(function(item){
-      if(item !== this && this.itemInReach(item)){
+      if(item !== this  && this.itemInReach(item)){
         inReach.push(item)
       }
     }, this);
@@ -143,7 +162,7 @@ var lifter = {
   },
 
   pickUpItem: function(item){
-    if(this.itemInReach(item)){
+    if(this.itemInReach(item) && this.itemLiftable(item)){
       this.item = item;
     }
   },
@@ -172,7 +191,7 @@ var lifter = {
 }
 
 module.exports = lifter
-},{"../lib":1}],6:[function(require,module,exports){
+},{"../lib":1}],7:[function(require,module,exports){
 var plotable = {
   //Library to speak to the board when position has changed
 
@@ -207,7 +226,7 @@ var plotable = {
 }
 
 module.exports = plotable
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 walker = {
   walk: function(options){
     var options = options || {}
@@ -240,9 +259,10 @@ walker = {
 }
 
 module.exports = walker;
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var Person = require("./models/person.js");
 var Item = require("./models/item.js");
+var Door = require("./models/door.js");
 var BoardView = require("./views/board_view.js");
 var Board = require("./models/board.js");
 var FocusedObjectView = require("./views/focused_object_view.js");
@@ -269,12 +289,14 @@ window.onload = function(){
   person.learnSkills(walker)
 
   var person2 = new Person({name: "lala", position:{x:30,y:30}});
-  // person2.learnSkills(lifter)
-  // person2.learnSkills()
+  person2.learnSkills(walker);
+
+  var door = new Door({position:{x:50,y:50}});
   
   person.joinBoard(board);
   person2.joinBoard(board);
   box.joinBoard(board);
+  door.joinBoard(board);
 
   board.updateView();
   board.updateView('focusedView');
@@ -282,7 +304,7 @@ window.onload = function(){
   window.person = person;
   window.box = box; 
 }
-},{"./models/board.js":2,"./models/item.js":3,"./models/person.js":4,"./modules/lifter":5,"./modules/walker":7,"./views/board_view.js":9,"./views/focused_object_view.js":10}],9:[function(require,module,exports){
+},{"./models/board.js":2,"./models/door.js":3,"./models/item.js":4,"./models/person.js":5,"./modules/lifter":6,"./modules/walker":8,"./views/board_view.js":10,"./views/focused_object_view.js":11}],10:[function(require,module,exports){
 var BoardView = function(canvas){
   this.canvas = canvas;
   this.keyPress = this.keyPress.bind(this);
@@ -303,13 +325,18 @@ BoardView.prototype = {
     numPlotables = this.board.plotables.length;
     for(var i=0; i<numPlotables; i++){
       var item = this.board.plotables[i];
-      if (item.imageType === 'square'){
-        ctx.fillRect(item.position.x, item.position.y, 10, 10);
-      }
-      else if(item.imageType === 'circle'){
-        ctx.beginPath();
-        ctx.arc(item.position.x,item.position.y,5,0,2*Math.PI);
-        ctx.fill();
+      switch (item.imageType){
+        case 'square':
+          ctx.fillRect(item.position.x, item.position.y, 10, 10);
+          break;
+        case 'circle':
+          ctx.beginPath();
+          ctx.arc(item.position.x,item.position.y,5,0,2*Math.PI);
+          ctx.fill();
+          break;
+        case 'rec':
+          ctx.fillRect(item.position.x, item.position.y, 20, 4);
+          break;
       }
     }   
   },
@@ -337,7 +364,7 @@ BoardView.prototype = {
 }
 
 module.exports = BoardView;
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var FocusedObjectView = function(el){
   this.mainEl = el;
   this.headerEl = el.querySelector("#header");
@@ -374,4 +401,4 @@ FocusedObjectView.prototype = {
   }
 }
 module.exports = FocusedObjectView
-},{}]},{},[8]);
+},{}]},{},[9]);

@@ -57,6 +57,14 @@ describe('Lifter', function(){
     assert.equal(target.item, null);
   })
 
+  it("shouldn't be able to pick up an unliftable item", function(){
+    var target = {position:{x:0,y:0}, reach:20};
+    lib.extend(target, lifter)
+    var i = {position:{x:5,y:5}, unliftable:true};
+    target.pickUpItem(i);
+    assert.equal(target.item, null);
+  })
+
   it("should be able to drop item", function(){
     var target = {position:{x:0,y:0}, reach:20};
     lib.extend(target, lifter)

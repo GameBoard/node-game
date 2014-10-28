@@ -10,10 +10,14 @@ var lifter = {
     return this.distanceFromSelf(item) <= this.reach;
   },
 
+  itemLiftable:function(item){
+    return !item.unliftable;
+  },
+
   findItemsInReach: function(items){
     var inReach = [];
     items.forEach(function(item){
-      if(item !== this && this.itemInReach(item)){
+      if(item !== this  && this.itemInReach(item)){
         inReach.push(item)
       }
     }, this);
@@ -21,7 +25,7 @@ var lifter = {
   },
 
   pickUpItem: function(item){
-    if(this.itemInReach(item)){
+    if(this.itemInReach(item) && this.itemLiftable(item)){
       this.item = item;
     }
   },

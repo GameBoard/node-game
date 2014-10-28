@@ -18,13 +18,18 @@ BoardView.prototype = {
     numPlotables = this.board.plotables.length;
     for(var i=0; i<numPlotables; i++){
       var item = this.board.plotables[i];
-      if (item.imageType === 'square'){
-        ctx.fillRect(item.position.x, item.position.y, 10, 10);
-      }
-      else if(item.imageType === 'circle'){
-        ctx.beginPath();
-        ctx.arc(item.position.x,item.position.y,5,0,2*Math.PI);
-        ctx.fill();
+      switch (item.imageType){
+        case 'square':
+          ctx.fillRect(item.position.x, item.position.y, 10, 10);
+          break;
+        case 'circle':
+          ctx.beginPath();
+          ctx.arc(item.position.x,item.position.y,5,0,2*Math.PI);
+          ctx.fill();
+          break;
+        case 'rec':
+          ctx.fillRect(item.position.x, item.position.y, 20, 4);
+          break;
       }
     }   
   },

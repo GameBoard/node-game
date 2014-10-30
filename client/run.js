@@ -38,7 +38,7 @@ window.onload = function(){
 
   focusedView.render(); 
   boardView.render();
-
+  window.view = boardView;
   window.person = person;
   window.box = box; 
 }

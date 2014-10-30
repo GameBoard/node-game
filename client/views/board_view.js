@@ -8,13 +8,18 @@ var BoardView = function(options){
   this.render = this.render.bind(this);
   window.addEventListener('keydown',this.keyPress,false);
   this.boundary = 5;
-  
+ 
+  this.image = new Image();
+  this.image.src = 'dudenew.png';
+  this.image.onload = this.render;
+  this.x = 0;
+  this.y = 0;
+  this.count = 0;
 }
 
 BoardView.prototype = {
 
   render: function(){
-    console.log('rendering')
     var ctx = this.canvas.getContext("2d");
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     ctx.fillStyle = "rgb(200,0,0)";
@@ -35,6 +40,19 @@ BoardView.prototype = {
           break;
       }
     }
+    this.count++;
+    if (this.count % 10 === 0){
+      this.x++;
+      if (this.x===4){
+        this.x=0;
+        this.y++;   
+        if(this.y===4){
+          this.y=0;
+        }
+      }
+    }
+
+    ctx.drawImage(this.image,(50*this.x),(50*this.y),50,50,0,0,50,50);
     window.requestAnimationFrame(this.render);   
   },
 

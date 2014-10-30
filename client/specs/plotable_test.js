@@ -21,15 +21,6 @@ describe('plotable', function(){
     assert(board.addPlotable.calledWith(target)); 
   })
 
-  it('should be able to update board', function(){
-    var target = {position:{x:5,y:5}}
-    lib.extend(target, plotable)
-    var board = {updateView: sinon.spy(), addPlotable: sinon.spy()}
-    target.joinBoard(board);
-    target.updateBoard();
-    assert(board.updateView.calledOnce);
-  })
-
   it('should be moveable', function(){
     var target = {position:{x:10,y:10}}
     lib.extend(target, plotable)
@@ -58,15 +49,5 @@ describe('plotable', function(){
     target.movePosition({x:5,y:5});
     assert.equal(target.position.x, 15);
     assert.equal(target.position.y, 15);
-  })
-
-  it('should update board when moved', function(){
-    var target = {position:{x:10,y:10}}
-    lib.extend(target, plotable)
-    var spy = sinon.spy(target, "updateBoard");
-    var board = {width:100,height:100, addPlotable: sinon.spy(), updateView: sinon.spy()};
-    target.joinBoard(board);
-    target.changePosition({x:20,y:15});
-    assert(spy.calledOnce);
   })
 })

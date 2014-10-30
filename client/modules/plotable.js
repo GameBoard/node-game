@@ -1,11 +1,4 @@
 var plotable = {
-  //Library to speak to the board when position has changed
-
-  updateBoard: function(){
-    if(this.board){
-      this.board.updateView();
-    }
-  },
   joinBoard: function(board){
     this.board = board;
     board.addPlotable(this);
@@ -16,7 +9,6 @@ var plotable = {
       if(this.item){
         this.item.position = newPosition;
       }
-      this.updateBoard();
     }
   },
   movePosition: function(positionChange){

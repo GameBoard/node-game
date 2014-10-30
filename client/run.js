@@ -15,11 +15,11 @@ window.onload = function(){
   var focusedDiv = document.getElementById('focused_object');
 
   var board = new Board();
-  var boardView = new BoardView(canvas);
+  var boardView = new BoardView({canvas:canvas, board:board});
 
-  board.setView(boardView)
-  var focusedView = new FocusedObjectView(focusedDiv);
-  board.setView(focusedView, 'focusedView')
+  // board.setView(boardView)
+  var focusedView = new FocusedObjectView({el:focusedDiv, board:board});
+  // board.setView(focusedView, 'focusedView')
   
   var box = new Item();
   var person = new Person({name: "dodo"});
@@ -36,8 +36,8 @@ window.onload = function(){
   box.joinBoard(board);
   door.joinBoard(board);
 
-  board.updateView();
-  board.updateView('focusedView');
+  focusedView.render(); 
+  boardView.render();
 
   window.person = person;
   window.box = box; 

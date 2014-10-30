@@ -4,34 +4,7 @@ var sinon = require('sinon');
 
 
 describe('Board', function(){
-  it('should be able set view', function(){
-    view = {setBoard:sinon.spy()}
-    var b = new Board()
-    b.setView(view);
-    assert.equal(b.view, view);     
-  })
 
-  it('should be able set view with name', function(){  
-    var b = new Board()
-    view = {setBoard:sinon.spy()}
-    b.setView(view, 'namedView');
-    assert.equal(b.namedView, view);     
-  })
-
-  it('should set itself on view when setting view ', function(){
-    view = {setBoard: sinon.spy()}
-    var b = new Board()
-    b.setView(view);
-    assert(view.setBoard.called);     
-  })
-
-  it('should be able to update view', function(){
-    var board = new Board();
-    var view = {render: sinon.spy(),setBoard: sinon.spy()}
-    board.setView(view)
-    board.updateView();
-    assert(view.render.calledOnce);
-  })
 
   it('should be created a list of plotables', function(){
     var board = new Board();
@@ -88,14 +61,6 @@ describe('Board', function(){
     assert.equal(board.findFocusedControllable(), controllable2);
   })
 
-  it('should update focused view when focus on controlllable', function(){ 
-    var board = new Board();
-    view = {setBoard:sinon.spy(), render:sinon.spy(), }
-    board.setView(view, 'focusedView');
-    var controllable = {controllable: true};
-    var spy = sinon.spy(board, "updateView"); // TODO test named passed in
-    board.focusOn(controllable)
-    assert(spy.calledOnce);
-  })
+
 
 })

@@ -5,7 +5,6 @@ var Door = require('../models/door.js')
 describe('Door', function(){
   it('should be a plotable', function(){
     d = new Door();
-    assert('updateBoard' in d);
     assert('joinBoard' in d);
   })
 

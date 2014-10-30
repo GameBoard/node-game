@@ -1,15 +1,16 @@
-var FocusedObjectView = function(el){
-  this.mainEl = el;
-  this.headerEl = el.querySelector("#header");
-  this.skillsEl = el.querySelector("#skills");
+var FocusedObjectView = function(options){
+  var options = options || {};
+  this.board = options.board
+  this.mainEl = options.el;
+  this.headerEl = options.el.querySelector("#header");
+  this.skillsEl = options.el.querySelector("#skills");
   this.skillClicked = this.skillClicked.bind(this);
+  this.render = this.render.bind(this);
+  window.addEventListener('focused-changed', this.render, false);
 }
 
 FocusedObjectView.prototype = {
-  setBoard: function(board){
-    this.board = board;
-  },
-  render: function(){
+  render: function(e){
     var focused =  this.board.findFocusedControllable();
     this.headerEl.innerHTML = focused.name;
     this.skillsEl.innerHTML = "";

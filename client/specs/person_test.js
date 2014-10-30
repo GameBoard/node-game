@@ -16,7 +16,6 @@ describe('Person', function(){
 
   it('shoud be a plotable', function(){
     var p = new Person();
-    assert('updateBoard' in p);
     assert('joinBoard' in p);
   })
 

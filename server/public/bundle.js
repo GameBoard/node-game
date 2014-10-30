@@ -23,24 +23,11 @@ module.exports = lib;
 var Board = function(){
   this.plotables = [];
   this.controllables = [];
-  this.width = 800 // todo find nice way to only put this one place
+  this.width = 800 // make board view set canvas sizing based on this
   this.height = 400
 }
 
 Board.prototype = {
-  setView: function(view, viewName){
-    nameOfView = viewName || 'view'
-    this[nameOfView] = view
-    view.setBoard(this);
-  },
-
-  updateView: function(viewName){
-    nameOfView = viewName || 'view'
-    if (this[nameOfView]) {
-      this[nameOfView].render();
-    }
-  },
-
   addPlotable: function(plotable){
     this.plotables.push(plotable);
     if (plotable.controllable){
@@ -50,7 +37,9 @@ Board.prototype = {
 
   focusOn: function(controllable){
     this.focusedControllable = controllable;
-    this.updateView('focusedView');
+    var event = new Event('focused-changed');
+    window.dispatchEvent(event);
+    //trigger event that controllable changed
   },
 
   findFocusedControllable:function(){
@@ -193,13 +182,8 @@ var lifter = {
 module.exports = lifter
 },{"../lib":1}],7:[function(require,module,exports){
 var plotable = {
-  //Library to speak to the board when position has changed
+  //Libary to add object to board and set position of object
 
-  updateBoard: function(){
-    if(this.board){
-      this.board.updateView();
-    }
-  },
   joinBoard: function(board){
     this.board = board;
     board.addPlotable(this);
@@ -210,7 +194,6 @@ var plotable = {
       if(this.item){
         this.item.position = newPosition;
       }
-      this.updateBoard();
     }
   },
   movePosition: function(positionChange){
@@ -277,11 +260,11 @@ window.onload = function(){
   var focusedDiv = document.getElementById('focused_object');
 
   var board = new Board();
-  var boardView = new BoardView(canvas);
+  var boardView = new BoardView({canvas:canvas, board:board});
 
-  board.setView(boardView)
-  var focusedView = new FocusedObjectView(focusedDiv);
-  board.setView(focusedView, 'focusedView')
+  // board.setView(boardView)
+  var focusedView = new FocusedObjectView({el:focusedDiv, board:board});
+  // board.setView(focusedView, 'focusedView')
   
   var box = new Item();
   var person = new Person({name: "dodo"});
@@ -298,27 +281,30 @@ window.onload = function(){
   box.joinBoard(board);
   door.joinBoard(board);
 
-  board.updateView();
-  board.updateView('focusedView');
+  focusedView.render(); 
+  boardView.render();
 
   window.person = person;
   window.box = box; 
 }
 },{"./models/board.js":2,"./models/door.js":3,"./models/item.js":4,"./models/person.js":5,"./modules/lifter":6,"./modules/walker":8,"./views/board_view.js":10,"./views/focused_object_view.js":11}],10:[function(require,module,exports){
-var BoardView = function(canvas){
-  this.canvas = canvas;
+var BoardView = function(options){
+  var options = options || {};
+  this.canvas = options.canvas;
+  this.board = options.board;
+  // Here set canvas size based on board model
+
   this.keyPress = this.keyPress.bind(this);
+  this.render = this.render.bind(this);
   window.addEventListener('keydown',this.keyPress,false);
   this.boundary = 5;
+  
 }
 
 BoardView.prototype = {
 
-  setBoard: function(board){
-    this.board = board;
-  },
-
   render: function(){
+    console.log('rendering')
     var ctx = this.canvas.getContext("2d");
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     ctx.fillStyle = "rgb(200,0,0)";
@@ -338,7 +324,8 @@ BoardView.prototype = {
           ctx.fillRect(item.position.x, item.position.y, 20, 4);
           break;
       }
-    }   
+    }
+    window.requestAnimationFrame(this.render);   
   },
 
   keyPress: function(ev){
@@ -365,18 +352,19 @@ BoardView.prototype = {
 
 module.exports = BoardView;
 },{}],11:[function(require,module,exports){
-var FocusedObjectView = function(el){
-  this.mainEl = el;
-  this.headerEl = el.querySelector("#header");
-  this.skillsEl = el.querySelector("#skills");
+var FocusedObjectView = function(options){
+  var options = options || {};
+  this.board = options.board
+  this.mainEl = options.el;
+  this.headerEl = options.el.querySelector("#header");
+  this.skillsEl = options.el.querySelector("#skills");
   this.skillClicked = this.skillClicked.bind(this);
+  this.render = this.render.bind(this);
+  window.addEventListener('focused-changed', this.render, false);
 }
 
 FocusedObjectView.prototype = {
-  setBoard: function(board){
-    this.board = board;
-  },
-  render: function(){
+  render: function(e){
     var focused =  this.board.findFocusedControllable();
     this.headerEl.innerHTML = focused.name;
     this.skillsEl.innerHTML = "";

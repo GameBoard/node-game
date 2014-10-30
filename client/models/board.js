@@ -1,24 +1,11 @@
 var Board = function(){
   this.plotables = [];
   this.controllables = [];
-  this.width = 800 // todo find nice way to only put this one place
+  this.width = 800 // make board view set canvas sizing based on this
   this.height = 400
 }
 
 Board.prototype = {
-  setView: function(view, viewName){
-    nameOfView = viewName || 'view'
-    this[nameOfView] = view
-    view.setBoard(this);
-  },
-
-  updateView: function(viewName){
-    nameOfView = viewName || 'view'
-    if (this[nameOfView]) {
-      this[nameOfView].render();
-    }
-  },
-
   addPlotable: function(plotable){
     this.plotables.push(plotable);
     if (plotable.controllable){
@@ -28,7 +15,9 @@ Board.prototype = {
 
   focusOn: function(controllable){
     this.focusedControllable = controllable;
-    this.updateView('focusedView');
+    var event = new Event('focused-changed');
+    window.dispatchEvent(event);
+    //trigger event that controllable changed
   },
 
   findFocusedControllable:function(){

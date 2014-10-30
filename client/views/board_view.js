@@ -1,17 +1,20 @@
-var BoardView = function(canvas){
-  this.canvas = canvas;
+var BoardView = function(options){
+  var options = options || {};
+  this.canvas = options.canvas;
+  this.board = options.board;
+  // Here set canvas size based on board model
+
   this.keyPress = this.keyPress.bind(this);
+  this.render = this.render.bind(this);
   window.addEventListener('keydown',this.keyPress,false);
   this.boundary = 5;
+  
 }
 
 BoardView.prototype = {
 
-  setBoard: function(board){
-    this.board = board;
-  },
-
   render: function(){
+    console.log('rendering')
     var ctx = this.canvas.getContext("2d");
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     ctx.fillStyle = "rgb(200,0,0)";
@@ -31,7 +34,8 @@ BoardView.prototype = {
           ctx.fillRect(item.position.x, item.position.y, 20, 4);
           break;
       }
-    }   
+    }
+    window.requestAnimationFrame(this.render);   
   },
 
   keyPress: function(ev){

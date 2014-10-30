@@ -6,7 +6,6 @@ describe('Item', function(){
 
   it('should be a plotable', function(){
     i = new Item();
-    assert('updateBoard' in i);
     assert('joinBoard' in i);
   })
 

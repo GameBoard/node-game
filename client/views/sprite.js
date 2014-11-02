@@ -13,7 +13,7 @@ function Sprite(options){
   this.refreshRate = options.refreshRate;
   this.model = options.model;
   this.x = 0;
-  this.y = 0;
+  this.y = 1;
 
   this.lastPosition = {x:this.model.position.x,y:this.model.position.y};
 }
@@ -24,6 +24,7 @@ Sprite.prototype = {
   },
 
   draw: function(cycle){
+
 
     if (cycle % this.refreshRate  === 0){
       if(this.moving()){
@@ -45,10 +46,14 @@ Sprite.prototype = {
       this.lastPosition.y = this.model.position.y;
       
     }
+    this.ctx.save(); 
+    this.ctx.translate(this.model.position.x, this.model.position.y);
+    this.ctx.rotate(this.model.rotation || 0);
 
     this.ctx.drawImage(this.image,(this.xSize*this.x),(this.ySize*this.y),
-                       this.xSize,this.ySize,this.model.position.x,
-                       this.model.position.y,this.xSize,this.ySize);
+                       this.xSize,this.ySize,-1*(this.xSize/2),
+                       -1*(this.ySize/2),this.xSize,this.ySize);
+    this.ctx.restore();
 
   }
 

@@ -216,15 +216,19 @@ walker = {
     switch (options.direction){
       case 'up': //38://up
         change = {x:0,y: -stride};
+        this.rotation = 0;
         break;
       case 'down'://40://down
         change = {x:0,y: stride};
+        this.rotation = Math.PI;
         break;
       case 'left'://37://left
         change = {x:-stride,y: 0};
+        this.rotation = (3*Math.PI)/2;
         break;
       case 'right'://39://right
-        change = {x:stride,y: 0} ;
+        change = {x:stride,y: 0};
+        this.rotation = Math.PI/2;
     }
     this.movePosition(change);
   },
@@ -414,22 +418,20 @@ function Sprite(options){
   this.refreshRate = options.refreshRate;
   this.model = options.model;
   this.x = 0;
-  this.y = 0;
+  this.y = 1;
 
   this.lastPosition = {x:this.model.position.x,y:this.model.position.y};
+  console.log('thisimage', this.image)
 }
 
 Sprite.prototype = {
   moving:function(){
     return this.model.position.x != this.lastPosition.x || this.model.position.y != this.lastPosition.y;
-    // return true;
   },
 
   draw: function(cycle){
 
-    // console.log('drawing old positoi', this.lastPosition);
-    // console.log('drawing new positoin', this.model.position);
-    // 
+
     if (cycle % this.refreshRate  === 0){
       if(this.moving()){
         this.x++;
@@ -450,14 +452,14 @@ Sprite.prototype = {
       this.lastPosition.y = this.model.position.y;
       
     }
+    this.ctx.save(); 
+    this.ctx.translate(this.model.position.x, this.model.position.y);
+    this.ctx.rotate(this.model.rotation || 0);
 
     this.ctx.drawImage(this.image,(this.xSize*this.x),(this.ySize*this.y),
-                       this.xSize,this.ySize,this.model.position.x,
-                       this.model.position.y,this.xSize,this.ySize);
-
-    // }
-
-
+                       this.xSize,this.ySize,-1*(this.xSize/2),
+                       -1*(this.ySize/2),this.xSize,this.ySize);
+    this.ctx.restore();
 
   }
 

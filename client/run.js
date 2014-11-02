@@ -15,30 +15,29 @@ window.onload = function(){
   var focusedDiv = document.getElementById('focused_object');
 
   var board = new Board();
-  var boardView = new BoardView({canvas:canvas, board:board});
 
-  // board.setView(boardView)
-  var focusedView = new FocusedObjectView({el:focusedDiv, board:board});
-  // board.setView(focusedView, 'focusedView')
   
-  var box = new Item();
+  // var box = new Item();
   var person = new Person({name: "dodo"});
   person.learnSkills(lifter)
   person.learnSkills(walker)
 
-  var person2 = new Person({name: "lala", position:{x:30,y:30}});
-  person2.learnSkills(walker);
+  // var person2 = new Person({name: "lala", position:{x:30,y:30}});
+  // person2.learnSkills(walker);
 
   var door = new Door({position:{x:50,y:50}});
   
   person.joinBoard(board);
-  person2.joinBoard(board);
-  box.joinBoard(board);
+  // person2.joinBoard(board);
+  // box.joinBoard(board);
   door.joinBoard(board);
+
+  var boardView = new BoardView({canvas:canvas, board:board});
+  var focusedView = new FocusedObjectView({el:focusedDiv, board:board});
 
   focusedView.render(); 
   boardView.render();
   window.view = boardView;
   window.person = person;
-  window.box = box; 
+  // window.box = box; 
 }

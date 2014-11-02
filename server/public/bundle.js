@@ -258,89 +258,101 @@ window.onload = function(){
   var focusedDiv = document.getElementById('focused_object');
 
   var board = new Board();
-  var boardView = new BoardView({canvas:canvas, board:board});
 
-  // board.setView(boardView)
-  var focusedView = new FocusedObjectView({el:focusedDiv, board:board});
-  // board.setView(focusedView, 'focusedView')
   
-  var box = new Item();
+  // var box = new Item();
   var person = new Person({name: "dodo"});
   person.learnSkills(lifter)
   person.learnSkills(walker)
 
-  var person2 = new Person({name: "lala", position:{x:30,y:30}});
-  person2.learnSkills(walker);
+  // var person2 = new Person({name: "lala", position:{x:30,y:30}});
+  // person2.learnSkills(walker);
 
   var door = new Door({position:{x:50,y:50}});
   
   person.joinBoard(board);
-  person2.joinBoard(board);
-  box.joinBoard(board);
+  // person2.joinBoard(board);
+  // box.joinBoard(board);
   door.joinBoard(board);
+
+  var boardView = new BoardView({canvas:canvas, board:board});
+  var focusedView = new FocusedObjectView({el:focusedDiv, board:board});
 
   focusedView.render(); 
   boardView.render();
   window.view = boardView;
   window.person = person;
-  window.box = box; 
+  // window.box = box; 
 }
 },{"./models/board.js":2,"./models/door.js":3,"./models/item.js":4,"./models/person.js":5,"./modules/lifter":6,"./modules/walker":8,"./views/board_view.js":10,"./views/focused_object_view.js":11}],10:[function(require,module,exports){
+var Sprite = require('./sprite')
+
 var BoardView = function(options){
   var options = options || {};
   this.canvas = options.canvas;
   this.board = options.board;
+  this.ctx = this.canvas.getContext("2d");
   // Here set canvas size based on board model
 
   this.keyPress = this.keyPress.bind(this);
   this.render = this.render.bind(this);
   window.addEventListener('keydown',this.keyPress,false);
   this.boundary = 5;
+
+  this.sprites = [];
+
+  console.log('')
+
+  this.sprites.push(new Sprite({
+    src:'dudenew.png', 
+    onImageLoad: this.render, 
+    ctx: this.ctx,
+    xSections: 4,
+    ySections: 4,
+    xSize: 50,
+    ySize: 50,
+    refreshRate: 10,
+    model: this.board.plotables[0]
+  })
+  );
  
-  this.image = new Image();
-  this.image.src = 'dudenew.png';
-  this.image.onload = this.render;
-  this.x = 0;
-  this.y = 0;
   this.count = 0;
 }
 
 BoardView.prototype = {
 
   render: function(){
-    var ctx = this.canvas.getContext("2d");
-    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    ctx.fillStyle = "rgb(200,0,0)";
+    
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillStyle = "rgb(200,0,0)";
+    this.sprites.forEach(
+      function(sprite){
+        sprite.draw(this.count)
+      }, this
+    );
     numPlotables = this.board.plotables.length;
-    for(var i=0; i<numPlotables; i++){
-      var item = this.board.plotables[i];
-      switch (item.imageType){
-        case 'square':
-          ctx.fillRect(item.position.x, item.position.y, 10, 10);
-          break;
-        case 'circle':
-          ctx.beginPath();
-          ctx.arc(item.position.x,item.position.y,5,0,2*Math.PI);
-          ctx.fill();
-          break;
-        case 'rec':
-          ctx.fillRect(item.position.x, item.position.y, 20, 4);
-          break;
-      }
-    }
+    // for(var i=0; i<numPlotables; i++){
+    //   var item = this.board.plotables[i];
+    //   switch (item.imageType){
+    //     case 'square':
+    //       this.ctx.fillRect(item.position.x, item.position.y, 10, 10);
+    //       break;
+    //     case 'circle':
+    //       this.ctx.beginPath();
+    //       this.ctx.arc(item.position.x,item.position.y,5,0,2*Math.PI);
+    //       this.ctx.fill();
+    //       break;
+    //     case 'rec':
+    //       this.ctx.fillRect(item.position.x, item.position.y, 20, 4);
+    //       break;
+    //   }
+    // }
     this.count++;
-    if (this.count % 10 === 0){
-      this.x++;
-      if (this.x===4){
-        this.x=0;
-        this.y++;   
-        if(this.y===4){
-          this.y=0;
-        }
-      }
-    }
 
-    ctx.drawImage(this.image,(50*this.x),(50*this.y),50,50,0,0,50,50);
+
+    // personSprite.draw(this.count);
+
+    
     window.requestAnimationFrame(this.render);   
   },
 
@@ -367,7 +379,7 @@ BoardView.prototype = {
 }
 
 module.exports = BoardView;
-},{}],11:[function(require,module,exports){
+},{"./sprite":12}],11:[function(require,module,exports){
 var FocusedObjectView = function(options){
   var options = options || {};
   this.board = options.board
@@ -405,4 +417,47 @@ FocusedObjectView.prototype = {
   }
 }
 module.exports = FocusedObjectView
+},{}],12:[function(require,module,exports){
+function Sprite(options){
+  var options = options || {};
+  this.src = options.src;
+
+  this.image = new Image();
+  this.image.src = 'dudenew.png';
+  this.image.onload = options.onImageLoad;
+  this.ctx = options.ctx;
+  this.xSections = options.xSections;
+  this.ySections = options.ySections;
+  this.xSize = options.xSize;
+  this.ySize = options.ySize;
+  this.refreshRate = options.refreshRate;
+  this.model = options.model;
+  this.x = 0;
+  this.y = 0;
+}
+
+Sprite.prototype = {
+
+  draw: function(cycle){
+    if (cycle % this.refreshRate  === 0){
+      this.x++;
+      if (this.x===this.xSections){
+        this.x=0;
+        this.y++;   
+        if(this.y===this.ySections){
+          this.y=0;
+        }
+      }
+    }
+
+    console.log('drawing this', this);
+
+    this.ctx.drawImage(this.image,(this.xSize*this.x),(this.ySize*this.y),
+                       this.xSize,this.ySize,this.model.position.x,this.model.position.y,this.xSize,this.ySize);
+  }
+
+
+}
+
+module.exports = Sprite;
 },{}]},{},[9]);

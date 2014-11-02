@@ -14,26 +14,42 @@ function Sprite(options){
   this.model = options.model;
   this.x = 0;
   this.y = 0;
+
+  this.lastPosition = {x:this.model.position.x,y:this.model.position.y};
 }
 
 Sprite.prototype = {
+  moving:function(){
+    return this.model.position.x != this.lastPosition.x || this.model.position.y != this.lastPosition.y;
+  },
 
   draw: function(cycle){
+
     if (cycle % this.refreshRate  === 0){
-      this.x++;
-      if (this.x===this.xSections){
-        this.x=0;
-        this.y++;   
-        if(this.y===this.ySections){
-          this.y=0;
+      if(this.moving()){
+        this.x++;
+        if (this.x===this.xSections){
+          this.x=0;
+          this.y++;   
+          if(this.y===this.ySections){
+            this.y=0;
+          }
         }
       }
+      else{
+        this.x = 0;
+        this.y = 1;
+      }
+
+      this.lastPosition.x = this.model.position.x;
+      this.lastPosition.y = this.model.position.y;
+      
     }
 
-    console.log('drawing this', this);
-
     this.ctx.drawImage(this.image,(this.xSize*this.x),(this.ySize*this.y),
-                       this.xSize,this.ySize,this.model.position.x,this.model.position.y,this.xSize,this.ySize);
+                       this.xSize,this.ySize,this.model.position.x,
+                       this.model.position.y,this.xSize,this.ySize);
+
   }
 
 

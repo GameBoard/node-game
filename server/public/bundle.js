@@ -104,7 +104,7 @@ var Person = function(options){
   this.name = options.name || "default";
   this.position = options.position || {x:20, y:20};
   this.imageType = 'circle';
-  this.speed = options.speed || 10;
+  this.speed = options.speed || 5;
   this.controllable = true;
   this.reach = options.reach || 20;
   this.weight = options.weight || 4;
@@ -210,28 +210,28 @@ module.exports = plotable
 },{}],8:[function(require,module,exports){
 walker = {
   walk: function(options){
-    var options = options || {}
+    var options = options || {};
     stride = this.strideDistance();
-    var change = {}
+    var change = {};
     switch (options.direction){
       case 'up': //38://up
-        change = {x:0,y: -stride}
+        change = {x:0,y: -stride};
         break;
       case 'down'://40://down
-        change = {x:0,y: stride}
+        change = {x:0,y: stride};
         break;
       case 'left'://37://left
-        change = {x:-stride,y: 0}
+        change = {x:-stride,y: 0};
         break;
       case 'right'://39://right
-        change = {x:stride,y: 0} 
+        change = {x:stride,y: 0} ;
     }
     this.movePosition(change);
   },
 
   strideDistance: function(){
-    var speed = this.speed || 1
-    var weight = (this.totalWeight && this.totalWeight()) || this.weight || 0
+    var speed = this.speed || 1;
+    var weight = (this.totalWeight && this.totalWeight()) || this.weight || 0;
     var moveAmount = Math.max(speed - weight, 0);
     return moveAmount;
   }
@@ -262,8 +262,8 @@ window.onload = function(){
   
   // var box = new Item();
   var person = new Person({name: "dodo"});
-  person.learnSkills(lifter)
-  person.learnSkills(walker)
+  person.learnSkills(lifter);
+  person.learnSkills(walker);
 
   // var person2 = new Person({name: "lala", position:{x:30,y:30}});
   // person2.learnSkills(walker);
@@ -331,26 +331,7 @@ BoardView.prototype = {
       }, this
     );
     numPlotables = this.board.plotables.length;
-    // for(var i=0; i<numPlotables; i++){
-    //   var item = this.board.plotables[i];
-    //   switch (item.imageType){
-    //     case 'square':
-    //       this.ctx.fillRect(item.position.x, item.position.y, 10, 10);
-    //       break;
-    //     case 'circle':
-    //       this.ctx.beginPath();
-    //       this.ctx.arc(item.position.x,item.position.y,5,0,2*Math.PI);
-    //       this.ctx.fill();
-    //       break;
-    //     case 'rec':
-    //       this.ctx.fillRect(item.position.x, item.position.y, 20, 4);
-    //       break;
-    //   }
-    // }
     this.count++;
-
-
-    // personSprite.draw(this.count);
 
     
     window.requestAnimationFrame(this.render);   
@@ -434,26 +415,50 @@ function Sprite(options){
   this.model = options.model;
   this.x = 0;
   this.y = 0;
+
+  this.lastPosition = {x:this.model.position.x,y:this.model.position.y};
 }
 
 Sprite.prototype = {
+  moving:function(){
+    return this.model.position.x != this.lastPosition.x || this.model.position.y != this.lastPosition.y;
+    // return true;
+  },
 
   draw: function(cycle){
+
+    // console.log('drawing old positoi', this.lastPosition);
+    // console.log('drawing new positoin', this.model.position);
+    // 
     if (cycle % this.refreshRate  === 0){
-      this.x++;
-      if (this.x===this.xSections){
-        this.x=0;
-        this.y++;   
-        if(this.y===this.ySections){
-          this.y=0;
+      if(this.moving()){
+        this.x++;
+        if (this.x===this.xSections){
+          this.x=0;
+          this.y++;   
+          if(this.y===this.ySections){
+            this.y=0;
+          }
         }
       }
+      else{
+        this.x = 0;
+        this.y = 1;
+      }
+
+      this.lastPosition.x = this.model.position.x;
+      this.lastPosition.y = this.model.position.y;
+      
     }
 
-    console.log('drawing this', this);
-
     this.ctx.drawImage(this.image,(this.xSize*this.x),(this.ySize*this.y),
-                       this.xSize,this.ySize,this.model.position.x,this.model.position.y,this.xSize,this.ySize);
+                       this.xSize,this.ySize,this.model.position.x,
+                       this.model.position.y,this.xSize,this.ySize);
+
+    // }
+
+
+
   }
 
 

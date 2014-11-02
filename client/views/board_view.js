@@ -44,26 +44,7 @@ BoardView.prototype = {
       }, this
     );
     numPlotables = this.board.plotables.length;
-    // for(var i=0; i<numPlotables; i++){
-    //   var item = this.board.plotables[i];
-    //   switch (item.imageType){
-    //     case 'square':
-    //       this.ctx.fillRect(item.position.x, item.position.y, 10, 10);
-    //       break;
-    //     case 'circle':
-    //       this.ctx.beginPath();
-    //       this.ctx.arc(item.position.x,item.position.y,5,0,2*Math.PI);
-    //       this.ctx.fill();
-    //       break;
-    //     case 'rec':
-    //       this.ctx.fillRect(item.position.x, item.position.y, 20, 4);
-    //       break;
-    //   }
-    // }
     this.count++;
-
-
-    // personSprite.draw(this.count);
 
     
     window.requestAnimationFrame(this.render);   

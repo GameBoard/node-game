@@ -19,8 +19,8 @@ window.onload = function(){
   
   // var box = new Item();
   var person = new Person({name: "dodo"});
-  person.learnSkills(lifter)
-  person.learnSkills(walker)
+  person.learnSkills(lifter);
+  person.learnSkills(walker);
 
   // var person2 = new Person({name: "lala", position:{x:30,y:30}});
   // person2.learnSkills(walker);

@@ -3,7 +3,7 @@ function Sprite(options){
   this.src = options.src;
 
   this.image = new Image();
-  this.image.src = 'dudenew.png';
+  this.image.src = options.src;
   this.image.onload = options.onImageLoad;
   this.ctx = options.ctx;
   this.xSections = options.xSections;
@@ -12,10 +12,9 @@ function Sprite(options){
   this.ySize = options.ySize;
   this.refreshRate = options.refreshRate;
   this.model = options.model;
-  this.x = 0;
-  this.y = 1;
-
   this.lastPosition = {x:this.model.position.x,y:this.model.position.y};
+  this.x = 0;
+  this.y = 0;
 }
 
 Sprite.prototype = {
@@ -23,23 +22,32 @@ Sprite.prototype = {
     return this.model.position.x != this.lastPosition.x || this.model.position.y != this.lastPosition.y;
   },
 
-  draw: function(cycle){
+  singleImage:function(){
+    return (this.xSections == 1 && this.ySections == 1)
+  },
 
-
-    if (cycle % this.refreshRate  === 0){
-      if(this.moving()){
-        this.x++;
-        if (this.x===this.xSections){
-          this.x=0;
-          this.y++;   
-          if(this.y===this.ySections){
-            this.y=0;
-          }
+  findImageSection: function() {
+    if(this.moving()){
+      this.x++;
+      if (this.x===this.xSections){
+        this.x=0;
+        this.y++;   
+        if(this.y===this.ySections){
+          this.y=0;
         }
       }
-      else{
-        this.x = 0;
-        this.y = 1;
+    }
+    else{
+      this.x = 0;
+      this.y = 1;
+    }    
+  },
+
+  draw: function(cycle){
+    if (cycle % this.refreshRate  === 0){
+      console.log('drawing sprite', this)
+      if (!this.singleImage()){
+        this.findImageSection()
       }
 
       this.lastPosition.x = this.model.position.x;

@@ -84,9 +84,9 @@ var lib = require('../lib');
 var plotable = require('../modules/plotable');
 
 var Item = function(position){
-  this.position = position || {x:0, y:0}
+  this.position = position || {x:30, y:30}
   this.imageType = 'square';
-  this.weight = 3;
+  this.weight = 1;
 }
 
 Item.prototype = {
@@ -107,7 +107,7 @@ var Person = function(options){
   this.speed = options.speed || 5;
   this.controllable = true;
   this.reach = options.reach || 20;
-  this.weight = options.weight || 4;
+  this.weight = options.weight || 3;
 }
 
 var proto = {
@@ -237,6 +237,7 @@ walker = {
     var speed = this.speed || 1;
     var weight = (this.totalWeight && this.totalWeight()) || this.weight || 0;
     var moveAmount = Math.max(speed - weight, 0);
+    console.log('move amount', moveAmount)
     return moveAmount;
   }
 
@@ -262,9 +263,8 @@ window.onload = function(){
   var focusedDiv = document.getElementById('focused_object');
 
   var board = new Board();
-
+  var box = new Item();
   
-  // var box = new Item();
   var person = new Person({name: "dodo"});
   person.learnSkills(lifter);
   person.learnSkills(walker);
@@ -272,12 +272,10 @@ window.onload = function(){
   // var person2 = new Person({name: "lala", position:{x:30,y:30}});
   // person2.learnSkills(walker);
 
-  var door = new Door({position:{x:50,y:50}});
   
   person.joinBoard(board);
   // person2.joinBoard(board);
-  // box.joinBoard(board);
-  door.joinBoard(board);
+  box.joinBoard(board);
 
   var boardView = new BoardView({canvas:canvas, board:board});
   var focusedView = new FocusedObjectView({el:focusedDiv, board:board});
@@ -305,8 +303,6 @@ var BoardView = function(options){
 
   this.sprites = [];
 
-  console.log('')
-
   this.sprites.push(new Sprite({
     src:'dudenew.png', 
     onImageLoad: this.render, 
@@ -317,6 +313,18 @@ var BoardView = function(options){
     ySize: 50,
     refreshRate: 10,
     model: this.board.plotables[0]
+  }));
+
+  this.sprites.push(new Sprite({
+    src:'box_small.png', 
+    onImageLoad: this.render, 
+    ctx: this.ctx,
+    xSections: 1,
+    ySections: 1,
+    xSize: 20,
+    ySize: 20,
+    refreshRate: 10,
+    model: this.board.plotables[1]
   })
   );
  
@@ -334,10 +342,7 @@ BoardView.prototype = {
         sprite.draw(this.count)
       }, this
     );
-    numPlotables = this.board.plotables.length;
-    this.count++;
-
-    
+    this.count++;   
     window.requestAnimationFrame(this.render);   
   },
 
@@ -408,7 +413,7 @@ function Sprite(options){
   this.src = options.src;
 
   this.image = new Image();
-  this.image.src = 'dudenew.png';
+  this.image.src = options.src;
   this.image.onload = options.onImageLoad;
   this.ctx = options.ctx;
   this.xSections = options.xSections;
@@ -417,11 +422,9 @@ function Sprite(options){
   this.ySize = options.ySize;
   this.refreshRate = options.refreshRate;
   this.model = options.model;
-  this.x = 0;
-  this.y = 1;
-
   this.lastPosition = {x:this.model.position.x,y:this.model.position.y};
-  console.log('thisimage', this.image)
+  this.x = 0;
+  this.y = 0;
 }
 
 Sprite.prototype = {
@@ -429,23 +432,32 @@ Sprite.prototype = {
     return this.model.position.x != this.lastPosition.x || this.model.position.y != this.lastPosition.y;
   },
 
-  draw: function(cycle){
+  singleImage:function(){
+    return (this.xSections == 1 && this.ySections == 1)
+  },
 
-
-    if (cycle % this.refreshRate  === 0){
-      if(this.moving()){
-        this.x++;
-        if (this.x===this.xSections){
-          this.x=0;
-          this.y++;   
-          if(this.y===this.ySections){
-            this.y=0;
-          }
+  findImageSection: function() {
+    if(this.moving()){
+      this.x++;
+      if (this.x===this.xSections){
+        this.x=0;
+        this.y++;   
+        if(this.y===this.ySections){
+          this.y=0;
         }
       }
-      else{
-        this.x = 0;
-        this.y = 1;
+    }
+    else{
+      this.x = 0;
+      this.y = 1;
+    }    
+  },
+
+  draw: function(cycle){
+    if (cycle % this.refreshRate  === 0){
+      console.log('drawing sprite', this)
+      if (!this.singleImage()){
+        this.findImageSection()
       }
 
       this.lastPosition.x = this.model.position.x;

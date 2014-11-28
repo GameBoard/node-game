@@ -14,7 +14,9 @@ var BoardView = function(options){
 
   this.sprites = [];
 
-  console.log('')
+  this.plotables.forEach(function(plotable){
+
+  });
 
   this.sprites.push(new Sprite({
     src:'dudenew.png', 
@@ -26,6 +28,18 @@ var BoardView = function(options){
     ySize: 50,
     refreshRate: 10,
     model: this.board.plotables[0]
+  }));
+
+  this.sprites.push(new Sprite({
+    src:'box_small.png', 
+    onImageLoad: this.render, 
+    ctx: this.ctx,
+    xSections: 1,
+    ySections: 1,
+    xSize: 20,
+    ySize: 20,
+    refreshRate: 10,
+    model: this.board.plotables[1]
   })
   );
  
@@ -43,10 +57,7 @@ BoardView.prototype = {
         sprite.draw(this.count)
       }, this
     );
-    numPlotables = this.board.plotables.length;
-    this.count++;
-
-    
+    this.count++;   
     window.requestAnimationFrame(this.render);   
   },
 

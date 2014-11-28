@@ -9,7 +9,7 @@ var Person = function(options){
   this.speed = options.speed || 5;
   this.controllable = true;
   this.reach = options.reach || 20;
-  this.weight = options.weight || 4;
+  this.weight = options.weight || 3;
 }
 
 var proto = {

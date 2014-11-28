@@ -27,6 +27,7 @@ walker = {
     var speed = this.speed || 1;
     var weight = (this.totalWeight && this.totalWeight()) || this.weight || 0;
     var moveAmount = Math.max(speed - weight, 0);
+    console.log('move amount', moveAmount)
     return moveAmount;
   }
 

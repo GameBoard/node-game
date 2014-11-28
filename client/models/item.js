@@ -2,9 +2,9 @@ var lib = require('../lib');
 var plotable = require('../modules/plotable');
 
 var Item = function(position){
-  this.position = position || {x:0, y:0}
+  this.position = position || {x:30, y:30}
   this.imageType = 'square';
-  this.weight = 3;
+  this.weight = 1;
 }
 
 Item.prototype = {

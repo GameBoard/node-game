@@ -15,9 +15,8 @@ window.onload = function(){
   var focusedDiv = document.getElementById('focused_object');
 
   var board = new Board();
+  var box = new Item();
 
-  
-  // var box = new Item();
   var person = new Person({name: "dodo"});
   person.learnSkills(lifter);
   person.learnSkills(walker);
@@ -25,12 +24,12 @@ window.onload = function(){
   // var person2 = new Person({name: "lala", position:{x:30,y:30}});
   // person2.learnSkills(walker);
 
-  var door = new Door({position:{x:50,y:50}});
   
   person.joinBoard(board);
   // person2.joinBoard(board);
-  // box.joinBoard(board);
-  door.joinBoard(board);
+  box.joinBoard(board);
+
+  personView new PersonView(person, spriteX)
 
   var boardView = new BoardView({canvas:canvas, board:board});
   var focusedView = new FocusedObjectView({el:focusedDiv, board:board});

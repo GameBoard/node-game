@@ -29,7 +29,6 @@ window.onload = function(){
   // person2.joinBoard(board);
   box.joinBoard(board);
 
-  personView new PersonView(person, spriteX)
 
   var boardView = new BoardView({canvas:canvas, board:board});
   var focusedView = new FocusedObjectView({el:focusedDiv, board:board});

@@ -14,10 +14,6 @@ var BoardView = function(options){
 
   this.sprites = [];
 
-  this.plotables.forEach(function(plotable){
-
-  });
-
   this.sprites.push(new Sprite({
     src:'dudenew.png', 
     onImageLoad: this.render, 

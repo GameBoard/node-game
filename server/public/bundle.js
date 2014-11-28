@@ -264,7 +264,7 @@ window.onload = function(){
 
   var board = new Board();
   var box = new Item();
-  
+
   var person = new Person({name: "dodo"});
   person.learnSkills(lifter);
   person.learnSkills(walker);
@@ -276,6 +276,7 @@ window.onload = function(){
   person.joinBoard(board);
   // person2.joinBoard(board);
   box.joinBoard(board);
+
 
   var boardView = new BoardView({canvas:canvas, board:board});
   var focusedView = new FocusedObjectView({el:focusedDiv, board:board});

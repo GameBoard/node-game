@@ -16,25 +16,23 @@ var BoardView = function(options){
 
   this.sprites.push(new Sprite({
     src:'dudenew.png', 
-    onImageLoad: this.render, 
     ctx: this.ctx,
     xSections: 4,
     ySections: 4,
     xSize: 50,
     ySize: 50,
-    refreshRate: 10,
+    refreshRate: 5,
     model: this.board.plotables[0]
   }));
 
   this.sprites.push(new Sprite({
     src:'box_small.png', 
-    onImageLoad: this.render, 
     ctx: this.ctx,
     xSections: 1,
     ySections: 1,
     xSize: 20,
     ySize: 20,
-    refreshRate: 10,
+    refreshRate: 5,
     model: this.board.plotables[1]
   })
   );
@@ -53,8 +51,21 @@ BoardView.prototype = {
         sprite.draw(this.count)
       }, this
     );
+
+    if(this.board.plotables[1].position.x > 50){
+      this.levelCompleted();
+    }
+
+
     this.count++;   
-    window.requestAnimationFrame(this.render);   
+    this.requestId = window.requestAnimationFrame(this.render);   
+  },
+
+  levelCompleted: function(){
+    console.log('level completed')
+    window.cancelAnimationFrame(this.requestId);
+    alert("level completed")
+    
   },
 
   keyPress: function(ev){

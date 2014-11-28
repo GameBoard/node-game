@@ -4,7 +4,7 @@ function Sprite(options){
 
   this.image = new Image();
   this.image.src = options.src;
-  this.image.onload = options.onImageLoad;
+  // this.image.onload = options.onImageLoad;
   this.ctx = options.ctx;
   this.xSections = options.xSections;
   this.ySections = options.ySections;
@@ -45,7 +45,6 @@ Sprite.prototype = {
 
   draw: function(cycle){
     if (cycle % this.refreshRate  === 0){
-      console.log('drawing sprite', this)
       if (!this.singleImage()){
         this.findImageSection()
       }

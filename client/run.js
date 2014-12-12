@@ -14,7 +14,7 @@ window.onload = function(){
   var canvas = document.getElementById('playground');
   var focusedDiv = document.getElementById('focused_object');
 
-  var board = new Board();
+  var board = new Board(window);
   var box = new Item();
 
   var person = new Person({name: "dodo"});

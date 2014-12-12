@@ -16,8 +16,8 @@ describe('Item', function(){
 
   it('shoud have a position', function(){
     i = new Item();
-    assert.equal(i.position.x, 0)
-    assert.equal(i.position.y, 0)
+    assert.equal(i.position.x, 30)
+    assert.equal(i.position.y, 30)
   })
 
   it('shoud have a weigth', function(){

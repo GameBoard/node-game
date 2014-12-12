@@ -1,8 +1,9 @@
-var Board = function(){
+var Board = function(window){
   this.plotables = [];
   this.controllables = [];
-  this.width = 800 // make board view set canvas sizing based on this
-  this.height = 400
+  this.width = 800 ;// make board view set canvas sizing based on this
+  this.height = 400;
+  this.window = window;
 }
 
 Board.prototype = {
@@ -15,8 +16,8 @@ Board.prototype = {
 
   focusOn: function(controllable){
     this.focusedControllable = controllable;
-    var event = new Event('focused-changed');
-    window.dispatchEvent(event);
+    var ev = new this.window.Event('focused-changed');
+    this.window.dispatchEvent(ev);
     //trigger event that controllable changed
   },
 

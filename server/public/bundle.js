@@ -20,11 +20,12 @@ var lib = {
 
 module.exports = lib;
 },{}],2:[function(require,module,exports){
-var Board = function(){
+var Board = function(window){
   this.plotables = [];
   this.controllables = [];
-  this.width = 800 // make board view set canvas sizing based on this
-  this.height = 400
+  this.width = 800 ;// make board view set canvas sizing based on this
+  this.height = 400;
+  this.window = window;
 }
 
 Board.prototype = {
@@ -37,8 +38,8 @@ Board.prototype = {
 
   focusOn: function(controllable){
     this.focusedControllable = controllable;
-    var event = new Event('focused-changed');
-    window.dispatchEvent(event);
+    var ev = new this.window.Event('focused-changed');
+    this.window.dispatchEvent(ev);
     //trigger event that controllable changed
   },
 
@@ -262,7 +263,7 @@ window.onload = function(){
   var canvas = document.getElementById('playground');
   var focusedDiv = document.getElementById('focused_object');
 
-  var board = new Board();
+  var board = new Board(window);
   var box = new Item();
 
   var person = new Person({name: "dodo"});
@@ -333,7 +334,7 @@ var BoardView = function(options){
 BoardView.prototype = {
 
   render: function(){
-    
+    console.log('render')
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillStyle = "rgb(200,0,0)";
     this.sprites.forEach(
@@ -342,17 +343,21 @@ BoardView.prototype = {
       }, this
     );
 
+
+   
+    // if (this.count == 0){
+    //   console.log('requesting animation frame')
+    this.requestId = window.requestAnimationFrame(this.render);
+    // }
+    this.count++;
+
     if(this.board.plotables[1].position.x > 50){
       this.levelCompleted();
     }
-
-
-    this.count++;   
-    this.requestId = window.requestAnimationFrame(this.render);   
   },
 
   levelCompleted: function(){
-    console.log('level completed')
+    console.log('cancelling animation frame')
     window.cancelAnimationFrame(this.requestId);
     alert("level completed")
     

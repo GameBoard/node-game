@@ -43,7 +43,7 @@ var BoardView = function(options){
 BoardView.prototype = {
 
   render: function(){
-    
+    console.log('render')
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillStyle = "rgb(200,0,0)";
     this.sprites.forEach(
@@ -52,17 +52,21 @@ BoardView.prototype = {
       }, this
     );
 
+
+   
+    // if (this.count == 0){
+    //   console.log('requesting animation frame')
+    this.requestId = window.requestAnimationFrame(this.render);
+    // }
+    this.count++;
+
     if(this.board.plotables[1].position.x > 50){
       this.levelCompleted();
     }
-
-
-    this.count++;   
-    this.requestId = window.requestAnimationFrame(this.render);   
   },
 
   levelCompleted: function(){
-    console.log('level completed')
+    console.log('cancelling animation frame')
     window.cancelAnimationFrame(this.requestId);
     alert("level completed")
     

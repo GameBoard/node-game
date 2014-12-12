@@ -25,17 +25,17 @@ var BoardView = function(options){
     model: this.board.plotables[0]
   }));
 
-  this.sprites.push(new Sprite({
-    src:'box_small.png', 
-    ctx: this.ctx,
-    xSections: 1,
-    ySections: 1,
-    xSize: 20,
-    ySize: 20,
-    refreshRate: 5,
-    model: this.board.plotables[1]
-  })
-  );
+  // this.sprites.push(new Sprite({
+  //   src:'box_small.png', 
+  //   ctx: this.ctx,
+  //   xSections: 1,
+  //   ySections: 1,
+  //   xSize: 20,
+  //   ySize: 20,
+  //   refreshRate: 5,
+  //   model: this.board.plotables[1]
+  // })
+  // );
  
   this.count = 0;
 }
@@ -52,17 +52,13 @@ BoardView.prototype = {
       }, this
     );
 
-
-   
-    // if (this.count == 0){
-    //   console.log('requesting animation frame')
     this.requestId = window.requestAnimationFrame(this.render);
-    // }
+
     this.count++;
 
-    if(this.board.plotables[1].position.x > 50){
-      this.levelCompleted();
-    }
+    // if(this.board.plotables[1].position.x > 50){
+    //   this.levelCompleted();
+    // }
   },
 
   levelCompleted: function(){

@@ -10,44 +10,56 @@ var lifter = require('../modules/lifter');
 var walker = require('../modules/walker');
 
 
+var Level = function(window){
+  this.window = window;
+}
+
+Level.prototype = {
+
+  enterSetup:function(){
+    var canvas = window.document.getElementById('playground');
+    var focusedDiv = window.document.getElementById('focused_object');
+    var board = new Board(this.window);
+
+    this.person = new Person({name: "dodo"});   
+    this.person.learnSkills(walker);
+    
+    this.person.joinBoard(board);
+
+    var boardView = new BoardView({canvas:canvas, board:board});
+    var focusedView = new FocusedObjectView({el:focusedDiv, board:board});
+    focusedView.render();
+    boardView.render();
+  },
+
+  enterTest:function(){
+    // var box = new Item();
+    
+  }
+
+
+}
+
+
+module.exports = Level
+},{"../models/board.js":4,"../models/door.js":5,"../models/item.js":6,"../models/person.js":7,"../modules/lifter":8,"../modules/walker":10,"../views/board_view.js":12,"../views/focused_object_view.js":13}],2:[function(require,module,exports){
+var Level = require('./level');
+
 var LevelController = function(window){
   this.window = window;
-  this.levelNumber = 1;
+  this.currentLevel = null;
 }
 
 LevelController.prototype = {
   startLevel:function(number){
-    this.levelNumber = number;
-    this.activateLevel();
+    this.currentLevel  = new Level();
+    this.currentLevel.enterSetup();
   },
-  
-  activateLevel:function(){
-    var canvas = window.document.getElementById('playground');
-    var focusedDiv = window.document.getElementById('focused_object');
-    var board = new Board(this.window);
-    var box = new Item();
-
-    var person = new Person({name: "dodo"});
-    person.learnSkills(lifter);
-    person.learnSkills(walker);
-    // var person2 = new Person({name: "lala", position:{x:30,y:30}});
-    // person2.learnSkills(walker)
-    
-    person.joinBoard(board);
-    // person2.joinBoard(board);
-    box.joinBoard(board);
-
-    var boardView = new BoardView({canvas:canvas, board:board});
-    var focusedView = new FocusedObjectView({el:focusedDiv, board:board});
-
-    focusedView.render(); 
-    boardView.render();    
-  } 
 }
 
 
 module.exports = LevelController
-},{"../models/board.js":3,"../models/door.js":4,"../models/item.js":5,"../models/person.js":6,"../modules/lifter":7,"../modules/walker":9,"../views/board_view.js":11,"../views/focused_object_view.js":12}],2:[function(require,module,exports){
+},{"./level":1}],3:[function(require,module,exports){
 var lib = {
   extend: function(destination, source) {
     for (var k in source) {
@@ -68,7 +80,7 @@ var lib = {
 }
 
 module.exports = lib;
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var Board = function(window){
   this.plotables = [];
   this.controllables = [];
@@ -114,7 +126,7 @@ Board.prototype = {
 }
 
 module.exports = Board
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var lib = require('../lib')
 var plotable = require('../modules/plotable')
 
@@ -129,7 +141,7 @@ var Door = function(options){
 lib.extend(Door.prototype, plotable)
 
 module.exports = Door;
-},{"../lib":2,"../modules/plotable":8}],5:[function(require,module,exports){
+},{"../lib":3,"../modules/plotable":9}],6:[function(require,module,exports){
 var lib = require('../lib');
 var plotable = require('../modules/plotable');
 
@@ -145,7 +157,7 @@ Item.prototype = {
 lib.extend(Item.prototype, plotable)
 
 module.exports = Item
-},{"../lib":2,"../modules/plotable":8}],6:[function(require,module,exports){
+},{"../lib":3,"../modules/plotable":9}],7:[function(require,module,exports){
 var lib = require('../lib');
 var plotable = require('../modules/plotable');
 
@@ -173,7 +185,7 @@ lib.extend(Person.prototype, proto)
 lib.extend(Person.prototype, plotable)
 
 module.exports = Person
-},{"../lib":2,"../modules/plotable":8}],7:[function(require,module,exports){
+},{"../lib":3,"../modules/plotable":9}],8:[function(require,module,exports){
 var lib = require('../lib')
 
 var lifter = {
@@ -230,7 +242,7 @@ var lifter = {
 }
 
 module.exports = lifter
-},{"../lib":2}],8:[function(require,module,exports){
+},{"../lib":3}],9:[function(require,module,exports){
 var plotable = {
   joinBoard: function(board){
     this.board = board;
@@ -257,7 +269,7 @@ var plotable = {
 }
 
 module.exports = plotable
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 walker = {
   walk: function(options){
     var options = options || {};
@@ -295,7 +307,7 @@ walker = {
 }
 
 module.exports = walker;
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var LevelController = require('./controller/level_controller');
 
 window.onload = function(){
@@ -330,7 +342,7 @@ window.onload = function(){
   // boardView.render();
   // window.box = box; 
 }
-},{"./controller/level_controller":1}],11:[function(require,module,exports){
+},{"./controller/level_controller":2}],12:[function(require,module,exports){
 var Sprite = require('./sprite')
 
 var BoardView = function(options){
@@ -358,17 +370,17 @@ var BoardView = function(options){
     model: this.board.plotables[0]
   }));
 
-  this.sprites.push(new Sprite({
-    src:'box_small.png', 
-    ctx: this.ctx,
-    xSections: 1,
-    ySections: 1,
-    xSize: 20,
-    ySize: 20,
-    refreshRate: 5,
-    model: this.board.plotables[1]
-  })
-  );
+  // this.sprites.push(new Sprite({
+  //   src:'box_small.png', 
+  //   ctx: this.ctx,
+  //   xSections: 1,
+  //   ySections: 1,
+  //   xSize: 20,
+  //   ySize: 20,
+  //   refreshRate: 5,
+  //   model: this.board.plotables[1]
+  // })
+  // );
  
   this.count = 0;
 }
@@ -393,9 +405,9 @@ BoardView.prototype = {
     // }
     this.count++;
 
-    if(this.board.plotables[1].position.x > 50){
-      this.levelCompleted();
-    }
+    // if(this.board.plotables[1].position.x > 50){
+    //   this.levelCompleted();
+    // }
   },
 
   levelCompleted: function(){
@@ -428,7 +440,7 @@ BoardView.prototype = {
 }
 
 module.exports = BoardView;
-},{"./sprite":13}],12:[function(require,module,exports){
+},{"./sprite":14}],13:[function(require,module,exports){
 var FocusedObjectView = function(options){
   var options = options || {};
   this.board = options.board
@@ -466,7 +478,7 @@ FocusedObjectView.prototype = {
   }
 }
 module.exports = FocusedObjectView
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 function Sprite(options){
   var options = options || {};
   this.src = options.src;
@@ -537,4 +549,4 @@ Sprite.prototype = {
 }
 
 module.exports = Sprite;
-},{}]},{},[10]);
+},{}]},{},[11]);

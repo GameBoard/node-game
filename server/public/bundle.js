@@ -1,4 +1,53 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var Person = require("../models/person.js");
+var Item = require("../models/item.js");
+var Door = require("../models/door.js");
+var BoardView = require("../views/board_view.js");
+var Board = require("../models/board.js");
+var FocusedObjectView = require("../views/focused_object_view.js");
+
+var lifter = require('../modules/lifter');
+var walker = require('../modules/walker');
+
+
+var LevelController = function(window){
+  this.window = window;
+  this.levelNumber = 1;
+}
+
+LevelController.prototype = {
+  startLevel:function(number){
+    this.levelNumber = number;
+    this.activateLevel();
+  },
+  
+  activateLevel:function(){
+    var canvas = window.document.getElementById('playground');
+    var focusedDiv = window.document.getElementById('focused_object');
+    var board = new Board(this.window);
+    var box = new Item();
+
+    var person = new Person({name: "dodo"});
+    person.learnSkills(lifter);
+    person.learnSkills(walker);
+    // var person2 = new Person({name: "lala", position:{x:30,y:30}});
+    // person2.learnSkills(walker)
+    
+    person.joinBoard(board);
+    // person2.joinBoard(board);
+    box.joinBoard(board);
+
+    var boardView = new BoardView({canvas:canvas, board:board});
+    var focusedView = new FocusedObjectView({el:focusedDiv, board:board});
+
+    focusedView.render(); 
+    boardView.render();    
+  } 
+}
+
+
+module.exports = LevelController
+},{"../models/board.js":3,"../models/door.js":4,"../models/item.js":5,"../models/person.js":6,"../modules/lifter":7,"../modules/walker":9,"../views/board_view.js":11,"../views/focused_object_view.js":12}],2:[function(require,module,exports){
 var lib = {
   extend: function(destination, source) {
     for (var k in source) {
@@ -19,7 +68,7 @@ var lib = {
 }
 
 module.exports = lib;
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 var Board = function(window){
   this.plotables = [];
   this.controllables = [];
@@ -65,7 +114,7 @@ Board.prototype = {
 }
 
 module.exports = Board
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var lib = require('../lib')
 var plotable = require('../modules/plotable')
 
@@ -80,7 +129,7 @@ var Door = function(options){
 lib.extend(Door.prototype, plotable)
 
 module.exports = Door;
-},{"../lib":1,"../modules/plotable":7}],4:[function(require,module,exports){
+},{"../lib":2,"../modules/plotable":8}],5:[function(require,module,exports){
 var lib = require('../lib');
 var plotable = require('../modules/plotable');
 
@@ -96,7 +145,7 @@ Item.prototype = {
 lib.extend(Item.prototype, plotable)
 
 module.exports = Item
-},{"../lib":1,"../modules/plotable":7}],5:[function(require,module,exports){
+},{"../lib":2,"../modules/plotable":8}],6:[function(require,module,exports){
 var lib = require('../lib');
 var plotable = require('../modules/plotable');
 
@@ -124,7 +173,7 @@ lib.extend(Person.prototype, proto)
 lib.extend(Person.prototype, plotable)
 
 module.exports = Person
-},{"../lib":1,"../modules/plotable":7}],6:[function(require,module,exports){
+},{"../lib":2,"../modules/plotable":8}],7:[function(require,module,exports){
 var lib = require('../lib')
 
 var lifter = {
@@ -181,7 +230,7 @@ var lifter = {
 }
 
 module.exports = lifter
-},{"../lib":1}],7:[function(require,module,exports){
+},{"../lib":2}],8:[function(require,module,exports){
 var plotable = {
   joinBoard: function(board){
     this.board = board;
@@ -208,7 +257,7 @@ var plotable = {
 }
 
 module.exports = plotable
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 walker = {
   walk: function(options){
     var options = options || {};
@@ -246,49 +295,42 @@ walker = {
 }
 
 module.exports = walker;
-},{}],9:[function(require,module,exports){
-var Person = require("./models/person.js");
-var Item = require("./models/item.js");
-var Door = require("./models/door.js");
-var BoardView = require("./views/board_view.js");
-var Board = require("./models/board.js");
-var FocusedObjectView = require("./views/focused_object_view.js");
-
-var lifter = require('./modules/lifter');
-var walker = require('./modules/walker');
-
+},{}],10:[function(require,module,exports){
+var LevelController = require('./controller/level_controller');
 
 window.onload = function(){
 
-  var canvas = document.getElementById('playground');
-  var focusedDiv = document.getElementById('focused_object');
+  var controller = new LevelController(window)
+  controller.startLevel(1)
 
-  var board = new Board(window);
-  var box = new Item();
+  // var canvas = document.getElementById('playground');
+  // var focusedDiv = document.getElementById('focused_object');
 
-  var person = new Person({name: "dodo"});
-  person.learnSkills(lifter);
-  person.learnSkills(walker);
+  // var board = new Board(window);
 
-  // var person2 = new Person({name: "lala", position:{x:30,y:30}});
-  // person2.learnSkills(walker);
+  // var box = new Item();
+
+  // var person = new Person({name: "dodo"});
+  // person.learnSkills(lifter);
+  // person.learnSkills(walker);
+
+  // // var person2 = new Person({name: "lala", position:{x:30,y:30}});
+  // // person2.learnSkills(walker);
 
   
-  person.joinBoard(board);
-  // person2.joinBoard(board);
-  box.joinBoard(board);
+  // person.joinBoard(board);
+  // // person2.joinBoard(board);
+  // box.joinBoard(board);
 
 
-  var boardView = new BoardView({canvas:canvas, board:board});
-  var focusedView = new FocusedObjectView({el:focusedDiv, board:board});
+  // var boardView = new BoardView({canvas:canvas, board:board});
+  // var focusedView = new FocusedObjectView({el:focusedDiv, board:board});
 
-  focusedView.render(); 
-  boardView.render();
-  window.view = boardView;
-  window.person = person;
+  // focusedView.render(); 
+  // boardView.render();
   // window.box = box; 
 }
-},{"./models/board.js":2,"./models/door.js":3,"./models/item.js":4,"./models/person.js":5,"./modules/lifter":6,"./modules/walker":8,"./views/board_view.js":10,"./views/focused_object_view.js":11}],10:[function(require,module,exports){
+},{"./controller/level_controller":1}],11:[function(require,module,exports){
 var Sprite = require('./sprite')
 
 var BoardView = function(options){
@@ -386,7 +428,7 @@ BoardView.prototype = {
 }
 
 module.exports = BoardView;
-},{"./sprite":12}],11:[function(require,module,exports){
+},{"./sprite":13}],12:[function(require,module,exports){
 var FocusedObjectView = function(options){
   var options = options || {};
   this.board = options.board
@@ -424,7 +466,7 @@ FocusedObjectView.prototype = {
   }
 }
 module.exports = FocusedObjectView
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 function Sprite(options){
   var options = options || {};
   this.src = options.src;
@@ -495,4 +537,4 @@ Sprite.prototype = {
 }
 
 module.exports = Sprite;
-},{}]},{},[9]);
+},{}]},{},[10]);
